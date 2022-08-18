@@ -9,7 +9,7 @@ class CutsceneState extends MusicBeatState
 {
 	var vido:String = "mods/introMod/_append/video.mp4";
 	var next:Void->Void;
-	public function new(vido:String = "mods/introMod/_append/Twi End Cutscene.mp4",next:Void->Void) 
+	public function new(vido:String = "mods/introMod/_append/video.mp4",next:Void->Void) 
 	{
 		super();
 		this.vido = vido;
