@@ -3030,6 +3030,15 @@ class PlayState extends MusicBeatState
 
 				FlxG.save.data.weekUnlocked = StoryMenuState.weekUnlocked;
 				FlxG.save.flush();
+				trace(SONG.song.toLowerCase());
+				if (SONG.song.toLowerCase() == 'tutorial'){
+					FlxG.switchState(new CutsceneState("mods/introMod/_append/video.mp4", function(){
+						FlxG.switchState(new CutsceneState("assets/videos/videa.mp4", CutsceneState.end ));
+					}));
+				}else{
+				FlxG.sound.playMusic(Paths.music('freakyMenu'));
+					CutsceneState.end();
+				}
 			}
 			else
 			{
