@@ -117,7 +117,7 @@ class PlayState extends MusicBeatState
 	public var luaSprites:Map<String, Dynamic>;
 	public var luaObjects:Map<String, Dynamic>;
 	public var unnamedLuaSprites:Int=0;
-	public var unnamedLuaObjects:Int=0;
+	public var unnamedLuaShaders:Int=0;
 	public var dadLua:LuaCharacter;
 	public var gfLua:LuaCharacter;
 	public var bfLua:LuaCharacter;
@@ -277,10 +277,10 @@ class PlayState extends MusicBeatState
 		Paths.imgCache.clear();
 		Cache.Clear();
 		instance = this;
+		Cache.Clear();
 		modchart = new ModChart(this);
 		FlxG.sound.music.looped=false;
 		unnamedLuaSprites=0;
-		unnamedLuaObjects=0;
 		currentPState=this;
 		currentOptions = OptionUtils.options.clone();
 		ScoreUtils.ratingWindows = OptionUtils.ratingWindowTypes[currentOptions.ratingWindow];
