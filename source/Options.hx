@@ -141,6 +141,7 @@ class Options
 	public var downScroll:Bool = false;
 	public var middleScroll:Bool = false;
 	public var menuFlash:Bool = true;
+	public var botPlay:Bool = false;
 
 	public var picoShaders:Bool = true;
 	public var picoCamshake:Bool = true;

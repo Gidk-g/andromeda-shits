@@ -285,6 +285,7 @@ class PlayState extends MusicBeatState
 		currentOptions = OptionUtils.options.clone();
 		ScoreUtils.ratingWindows = OptionUtils.ratingWindowTypes[currentOptions.ratingWindow];
 		ScoreUtils.ghostTapping = currentOptions.ghosttapping;
+		ScoreUtils.botPlay = currentOptions.botPlay;
 		Conductor.safeZoneOffset = ScoreUtils.ratingWindows[3]; // same as shit ms
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
@@ -2375,7 +2376,11 @@ class PlayState extends MusicBeatState
 
 		super.update(elapsed);
 
-		scoreTxt.text = "Score:" + songScore + " | Accuracy:" + truncateFloat(accuracy*100, 2) + "% | " + grade;
+		if (ScoreUtils.botPlay){
+			scoreTxt.text = 'BOTPLAY';
+		}else{
+		    scoreTxt.text = "Score:" + songScore + " | Accuracy:" + truncateFloat(accuracy*100, 2) + "% | " + grade;
+		}
 
 		if(misses>0 && currentOptions.failForMissing){
 			health=0;
