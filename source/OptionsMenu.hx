@@ -70,7 +70,6 @@ class OptionsMenu extends MusicBeatState
 		#end
 		category=defCat;
 		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image("menuDesat"));
-
 		menuBG.color = 0xFFa271de;
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
 		menuBG.updateHitbox();
@@ -129,18 +128,24 @@ class OptionsMenu extends MusicBeatState
 		category.curSelected = curSelected;
 	}
 
+	var canZoom = false;
+	var zoomdelay = 0.00;
 	override function update(elapsed:Float)
 	{
 		var upP = false;
 		var downP = false;
 		var leftP = false;
 		var rightP = false;
+		var left_ = false;
+		var right_ = false;
 		var accepted = false;
 		var back = false;
 		if(controls.keyboardScheme!=None){
 			upP = controls.UP_P;
 			downP = controls.DOWN_P;
 			leftP = controls.LEFT_P;
+			right_ = controls.RIGHT;
+			left_ = controls.LEFT;
 			rightP = controls.RIGHT_P;
 
 			accepted = controls.ACCEPT;
@@ -170,14 +175,22 @@ class OptionsMenu extends MusicBeatState
 			  OptionUtils.saveOptions(OptionUtils.options);
 			}
 		}
-		if(option.type!="Category"){
-			if(leftP){
+		
+		if (option.type != "Category"){
+			
+			if (left_ || right_) zoomdelay += elapsed/0.016;
+			
+			canZoom = zoomdelay > 30;
+			
+			if (!left_ && !right_) zoomdelay = 0;
+			
+			if(leftP || left_ && canZoom){
 				if(option.left()) {
 					option.createOptionText(curSelected,optionText);
 					changeSelection();
 				}
 			}
-			if(rightP){
+			if(rightP|| right_ && canZoom){
 				if(option.right()) {
 					option.createOptionText(curSelected,optionText);
 					changeSelection();

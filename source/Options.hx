@@ -135,6 +135,7 @@ class Options
 	public var dummy:Bool = false;
 	public var dummyInt:Int = 0;
 	public var ratingWindow:Int = 0;
+	public var TimeBar:Bool = true;
 	public var showMS:Bool = false;
 	public var ratingInHUD:Bool = false;
 	public var noteOffset:Int = 0;

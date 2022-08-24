@@ -68,6 +68,8 @@ class PlayState extends MusicBeatState
 {
 	public static var currentPState:PlayState;
 
+	public static var STRUM_X = 42;
+
 	public static var curStage:String = '';
 	public static var SONG:SwagSong;
 	public static var isStoryMode:Bool = false;
@@ -180,6 +182,8 @@ class PlayState extends MusicBeatState
 
 	var skipCountdown = false;
 
+	private var updateTime:Bool = true;
+
 	public var deathSound:String = 'fnf_loss_sfx';
 	public var deathEndSong:String = 'gameOverEnd';
 	public var deathSong:String = 'gameOver';
@@ -205,6 +209,8 @@ class PlayState extends MusicBeatState
 
 	private var assetSuffix:String = '';
 
+	public var botplayTxt:FlxText;
+
 	var limo:FlxSprite;
 	var grpLimoDancers:FlxTypedGroup<BackgroundDancer>;
 	var fastCar:FlxSprite;
@@ -221,6 +227,10 @@ class PlayState extends MusicBeatState
 	public var opponentRefNotes:FlxTypedGroup<FlxSprite>;
 	public var refReceptors:FlxTypedGroup<FlxSprite>;
 	public var opponentRefReceptors:FlxTypedGroup<FlxSprite>;
+
+	var timeTxt:FlxText;
+
+	var songPercent:Float = 0;
 
 	var talking:Bool = true;
 	var songScore:Int = 0;
@@ -244,6 +254,11 @@ class PlayState extends MusicBeatState
 	var bads:Float = 0;
 	var shits:Float = 0;
 	var luaModchartExists = false;
+
+	private var timeBarBG:AttachedSprite;
+	public var timeBar:FlxBar;
+
+	public var botplaySine:Float = 0;
 
 	var anotherPoint = false;
 
@@ -998,6 +1013,33 @@ class PlayState extends MusicBeatState
 		var p2Color = 0xFFFF0000; // TODO: GIVE EVERYONE CUSTOM HP BAR COLOURS!!!
 		// AND MAKE IT BETTER WITH A NOTEPAD FILE OR SOMETHING!!
 
+		var showTime:Bool = (currentOptions.TimeBar);
+		timeTxt = new FlxText(STRUM_X + (FlxG.width / 2) - 248, 19, 400, "", 32);
+		timeTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		timeTxt.scrollFactor.set();
+		timeTxt.alpha = 0;
+		timeTxt.borderSize = 2;
+		if(currentOptions.downScroll) timeTxt.y = FlxG.height - 44;
+
+		updateTime = true;
+
+		timeBarBG = new AttachedSprite('timeBar');
+		timeBarBG.x = timeTxt.x;
+		timeBarBG.y = timeTxt.y + (timeTxt.height / 4);
+		timeBarBG.scrollFactor.set();
+		timeBarBG.alpha = 0;
+		timeBarBG.color = FlxColor.BLACK;
+		timeBarBG.xAdd = -4;
+		timeBarBG.yAdd = -4;
+
+		timeBar = new FlxBar(timeBarBG.x + 4, timeBarBG.y + 4, LEFT_TO_RIGHT, Std.int(timeBarBG.width - 8), Std.int(timeBarBG.height - 8), this,
+			'songPercent', 0, 1);
+		timeBar.scrollFactor.set();
+		timeBar.createFilledBar(0xFF000000, 0xFFFFFFFF);
+		timeBar.numDivisions = 800; //How much lag this causes?? Should i tone it down to idk, 400 or 200?
+		timeBar.alpha = 0;
+		timeBarBG.sprTracker = timeBar;
+
 		switch(SONG.player1){
 			case 'bf-neb':
 				p1Color = 0xFF9534EB;
@@ -1026,6 +1068,17 @@ class PlayState extends MusicBeatState
 		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
 		add(scoreTxt);
+
+		botplayTxt = new FlxText(400, timeBarBG.y + 55, FlxG.width - 800, "BOTPLAY", 32);
+		botplayTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		botplayTxt.scrollFactor.set();
+		botplayTxt.borderSize = 1.25;
+		if(ScoreUtils.botPlay) {
+		    add(botplayTxt);
+		}
+		if(currentOptions.downScroll){
+			botplayTxt.y = timeBarBG.y - 78;
+		}
 
 		presetTxt = new FlxText(0, FlxG.height/2-80, 0, "", 20);
 		presetTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
@@ -1092,6 +1145,7 @@ class PlayState extends MusicBeatState
 		iconP1.cameras = [camHUD];
 		iconP2.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
+		botplayTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
 		missesTxt.cameras = [camHUD];
 		sicksTxt.cameras = [camHUD];
@@ -1100,6 +1154,9 @@ class PlayState extends MusicBeatState
 		shitsTxt.cameras = [camHUD];
 		highComboTxt.cameras = [camHUD];
 		presetTxt.cameras = [camHUD];
+		timeBar.cameras = [camHUD];
+		timeBarBG.cameras = [camHUD];
+		timeTxt.cameras = [camHUD];
 		// if (SONG.song == 'South')
 		// FlxG.camera.alpha = 0.7;
 		// UI_camera.zoom = 1;
@@ -1798,8 +1855,7 @@ class PlayState extends MusicBeatState
 
 	function startSong():Void
 	{
-		
-		
+		FlxG.sound.music.onComplete = finishSong.bind();
 		startingSong = false;
 
 		if(luaModchartExists && lua!=null){
@@ -1817,6 +1873,9 @@ class PlayState extends MusicBeatState
 		
 		previousFrameTime = FlxG.game.ticks;
 		lastReportedPlayheadPosition = 0;
+
+		FlxTween.tween(timeBar, {alpha: 1}, 0.5, {ease: FlxEase.circOut});
+		FlxTween.tween(timeTxt, {alpha: 1}, 0.5, {ease: FlxEase.circOut});
 
 		if (!paused)
 			FlxG.sound.playMusic(daInst, 1, false);
@@ -2176,6 +2235,8 @@ class PlayState extends MusicBeatState
 				resyncVocals();
 			}
 
+			updateTime = true;
+
 			if (!startTimer.finished)
 				startTimer.active = true;
 			paused = false;
@@ -2376,11 +2437,12 @@ class PlayState extends MusicBeatState
 
 		super.update(elapsed);
 
-		if (ScoreUtils.botPlay){
-			scoreTxt.text = 'BOTPLAY';
-		}else{
-		    scoreTxt.text = "Score:" + songScore + " | Accuracy:" + truncateFloat(accuracy*100, 2) + "% | " + grade;
+		if(ScoreUtils.botPlay) {
+			botplaySine += 180 * elapsed;
+			botplayTxt.alpha = 1 - Math.sin((Math.PI * botplaySine) / 180);
 		}
+
+		scoreTxt.text = "Score:" + songScore + " | Accuracy:" + truncateFloat(accuracy*100, 2) + "% | " + grade;
 
 		if(misses>0 && currentOptions.failForMissing){
 			health=0;
@@ -2509,6 +2571,19 @@ class PlayState extends MusicBeatState
 					Conductor.lastSongPos = Conductor.songPosition;
 					// Conductor.songPosition += FlxG.elapsed * 1000;
 					// trace('MISSED FRAME');
+				}
+
+                if(currentOptions.TimeBar){
+				if(updateTime) {
+					var curTime:Float = Conductor.songPosition;
+					if(curTime < 0) curTime = 0;
+					songPercent = (curTime / songLength);
+
+					var songCalc:Float = (songLength - curTime);
+
+					var secondsTotal:Int = Math.floor(songCalc / 1000);
+					if(secondsTotal < 0) secondsTotal = 0;
+				}
 				}
 			}
 
@@ -2994,6 +3069,12 @@ class PlayState extends MusicBeatState
 		FlxG.sound.music.volume = 0;
 		vocals.volume = 0;
 		TitleState.curDir = "assets";
+		updateTime = false;
+
+		timeBarBG.visible = false;
+		timeBar.visible = false;
+		timeTxt.visible = false;
+
 		#if windows
 		if(lua!=null){
 			lua.destroy();
@@ -3089,6 +3170,24 @@ class PlayState extends MusicBeatState
 	}
 
 	var endingSong:Bool = false;
+
+	var finishTimer:FlxTimer = null;
+	public function finishSong(?ignoreNoteOffset:Bool = false):Void
+	{
+		var finishCallback:Void->Void = endSong; //In case you want to change it in a specific song.
+
+		updateTime = false;
+		FlxG.sound.music.volume = 0;
+		vocals.volume = 0;
+		vocals.pause();
+		if(ignoreNoteOffset) {
+			finishCallback();
+		} else {
+			finishTimer = new FlxTimer().start(function(tmr:FlxTimer) {
+				finishCallback();
+			});
+		}
+	}
 
 	private function popUpScore(noteDiff:Float):Void
 	{
