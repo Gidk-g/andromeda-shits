@@ -3003,10 +3003,6 @@ class PlayState extends MusicBeatState
 			KillNotes();
 			FlxG.sound.music.time = FlxG.sound.music.length;
 		}
-		//if (FlxG.keys.justPressed.TWO){
-			//setSongTime(Conductor.songPosition + 10000);
-			//clearNotesBefore(Conductor.songPosition);
-		//}
 	}
 
 	public function setSongTime(time:Float)
