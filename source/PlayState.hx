@@ -2214,7 +2214,7 @@ class PlayState extends MusicBeatState
 		else
 			accuracy = hitNotes / totalNotes;
 
-		grade = ScoreUtils.AccuracyToGrade(accuracy) + (misses==0 ? " (FULL COMBO)" : ""); // TODO: Diff types of FC?? (MFC, SFC, GFC, BFC, WTFC)
+		grade = ScoreUtils.AccuracyToGrade(accuracy) + (misses==0 ? " (FC)" : ""); // TODO: Diff types of FC?? (MFC, SFC, GFC, BFC, WTFC)
 		missesTxt.text = "Miss: " + misses;
 		sicksTxt.text = "Sick: " + sicks;
 		goodsTxt.text = "Good: " + goods;
@@ -2452,7 +2452,6 @@ class PlayState extends MusicBeatState
 			health=0;
 		}
 		previousHealth=health;
-
 		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
 		{
 			persistentUpdate = false;
@@ -2837,7 +2836,7 @@ class PlayState extends MusicBeatState
 						if(daNote.tooLate)
 							daNote.alpha = .3;
 						else
-							daNote.alpha = FlxMath.lerp(.6, 0, (1-alpha));
+							daNote.alpha = FlxMath.lerp(.6, 0, 1-alpha);
 					}else{
 						if(daNote.tooLate)
 							daNote.alpha = .3;
@@ -3138,16 +3137,12 @@ class PlayState extends MusicBeatState
 
 	function endSong():Void
 	{
+		endingSong = true;
+		TitleState.curDir = "assets";
 		canPause = false;
 		FlxG.sound.music.volume = 0;
 		vocals.volume = 0;
-		TitleState.curDir = "assets";
-		updateTime = false;
-
-		timeBarBG.visible = false;
-		timeBar.visible = false;
-		timeTxt.visible = false;
-
+		FlxG.sound.music.stop();
 		#if windows
 		if(lua!=null){
 			lua.destroy();
