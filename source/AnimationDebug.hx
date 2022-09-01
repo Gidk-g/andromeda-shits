@@ -8,6 +8,8 @@ import flixel.addons.display.FlxGridOverlay;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
+import openfl.Lib;
+import openfl.desktop.Clipboard;
 
 /**
 	*DEBUG MODE
@@ -17,18 +19,21 @@ class AnimationDebug extends FlxState
 	var bf:Boyfriend;
 	var dad:Character;
 	var char:Character;
+	var ghostchar:Character;
 	var textAnim:FlxText;
 	var dumbTexts:FlxTypedGroup<FlxText>;
 	var animList:Array<String> = [];
 	var curAnim:Int = 0;
-	var isDad:Bool = true;
+	var GHOST_curAnim:Int = 0;
+	public static var isDad:Bool = true;
 	var daAnim:String = 'spooky';
 	var camFollow:FlxObject;
-
-	public function new(daAnim:String = 'spooky')
+	var texto:String = '';
+	public function new(daAnim:String = 'spooky',isDad:Bool=true)
 	{
 		super();
 		this.daAnim = daAnim;
+		AnimationDebug.isDad = isDad;
 	}
 
 	override function create()
@@ -39,30 +44,32 @@ class AnimationDebug extends FlxState
 		gridBG.scrollFactor.set(0.5, 0.5);
 		add(gridBG);
 
-		if (daAnim == 'bf')
-			isDad = false;
 
 		if (isDad)
 		{
 			dad = new Character(0, 0, daAnim);
 			dad.screenCenter();
 			dad.debugMode = true;
-			add(dad);
 
 			char = dad;
 			dad.flipX = false;
 		}
 		else
 		{
-			bf = new Boyfriend(0, 0);
+			bf = new Boyfriend(0, 0,daAnim);
 			bf.screenCenter();
 			bf.debugMode = true;
-			add(bf);
 
 			char = bf;
 			bf.flipX = false;
 		}
-
+ghostchar = new Character(0, 0, daAnim, !isDad);
+ghostchar.alpha = 0.5;
+ghostchar.debugMode = true;
+ghostchar.screenCenter();
+			ghostchar.flipX != isDad;
+			add(char);
+			add(ghostchar);
 		dumbTexts = new FlxTypedGroup<FlxText>();
 		add(dumbTexts);
 
@@ -85,14 +92,17 @@ class AnimationDebug extends FlxState
 	function genBoyOffsets(pushList:Bool = true):Void
 	{
 		var daLoop:Int = 0;
-
+		texto = '';
 		for (anim => offsets in char.animOffsets)
 		{
-			var text:FlxText = new FlxText(10, 20 + (18 * daLoop), 0, anim + ": " + offsets, 15);
+			var text:FlxText = new FlxText(10, 20 + (18 * daLoop), 0, anim + " " + offsets, 15);
 			text.scrollFactor.set();
 			text.color = FlxColor.BLUE;
+			var b = StringTools.replace(text.text, '[', '');
+			var c = StringTools.replace(b, ']', '');
+			var d = StringTools.replace(c, ',', ' ');
 			dumbTexts.add(text);
-
+			texto += d + '\n';
 			if (pushList)
 				animList.push(anim);
 
@@ -122,7 +132,7 @@ class AnimationDebug extends FlxState
 			FlxG.camera.zoom += 0.25;
 		if (FlxG.keys.justPressed.Q)
 			FlxG.camera.zoom -= 0.25;
-
+/*
 		if (FlxG.keys.pressed.I || FlxG.keys.pressed.J || FlxG.keys.pressed.K || FlxG.keys.pressed.L)
 		{
 			if (FlxG.keys.pressed.I)
@@ -142,16 +152,34 @@ class AnimationDebug extends FlxState
 		else
 		{
 			camFollow.velocity.set();
+		}*/
+
+		if (FlxG.keys.justPressed.C && FlxG.keys.pressed.CONTROL)
+		{
+			openfl.system.System.setClipboard(texto);
 		}
 
 		if (FlxG.keys.justPressed.W)
 		{
 			curAnim -= 1;
 		}
-
 		if (FlxG.keys.justPressed.S)
 		{
 			curAnim += 1;
+		}
+
+		if (FlxG.keys.justPressed.B)
+		{
+			ghostchar.visible = !ghostchar.visible;
+		}
+		
+		if (FlxG.keys.justPressed.I)
+		{
+			GHOST_curAnim -= 1;
+		}
+		if (FlxG.keys.justPressed.K)
+		{
+			GHOST_curAnim += 1;
 		}
 
 		if (curAnim < 0)
@@ -167,6 +195,10 @@ class AnimationDebug extends FlxState
 			updateTexts();
 			genBoyOffsets(false);
 		}
+		if (FlxG.keys.justPressed.K || FlxG.keys.justPressed.I )
+		{
+			ghostchar.playAnim(animList[curAnim]);
+		}
 
 		var upP = FlxG.keys.anyJustPressed([UP]);
 		var rightP = FlxG.keys.anyJustPressed([RIGHT]);
@@ -181,14 +213,23 @@ class AnimationDebug extends FlxState
 		if (upP || rightP || downP || leftP)
 		{
 			updateTexts();
-			if (upP)
+			if (upP){
 				char.animOffsets.get(animList[curAnim])[1] += 1 * multiplier;
-			if (downP)
+				ghostchar.animOffsets.get(animList[curAnim])[1] += 1 * multiplier;
+				
+			}
+			if (downP){
 				char.animOffsets.get(animList[curAnim])[1] -= 1 * multiplier;
-			if (leftP)
+				ghostchar.animOffsets.get(animList[curAnim])[1] -= 1 * multiplier;
+			}
+			if (leftP){
 				char.animOffsets.get(animList[curAnim])[0] += 1 * multiplier;
-			if (rightP)
+				ghostchar.animOffsets.get(animList[curAnim])[0] += 1 * multiplier;
+			}
+			if (rightP){
 				char.animOffsets.get(animList[curAnim])[0] -= 1 * multiplier;
+				ghostchar.animOffsets.get(animList[curAnim])[0] -= 1 * multiplier;
+			}
 
 			updateTexts();
 			genBoyOffsets(false);

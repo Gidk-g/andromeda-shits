@@ -85,6 +85,10 @@ class PlayState extends MusicBeatState
 
 	private var vocals:FlxSound;
 
+	public var hasScript:Bool = false;
+	
+	public var script:String = "";
+
 	private var dad:Character;
 	private var gf:Character;
 	private var boyfriend:Boyfriend;
@@ -107,6 +111,10 @@ class PlayState extends MusicBeatState
 	public var daInst:openfl.media.Sound;
 
 	public var newChars:Array<Character> = [];
+
+	public var camZoomTween:FlxTween;
+	public var camBoomTween:FlxTween;
+	public var camMoveTween:FlxTween;
 
 	private static var prevCamFollow:FlxObject;
 	private var lastHitDadNote:Note;
@@ -272,6 +280,9 @@ class PlayState extends MusicBeatState
 	public static var campaignScore:Int = 0;
 
 	var defaultCamZoom:Float = 1.05;
+	var defaultHudZoom:Float = 1;
+
+	var cz = 1.00;
 
 	// how big to stretch the pixel art assets
 	public static var daPixelZoom:Float = 6;
@@ -1526,6 +1537,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 
+		cz = FlxG.camera.zoom;
 		super.create();
 	}
 
@@ -2202,7 +2214,7 @@ class PlayState extends MusicBeatState
 		else
 			accuracy = hitNotes / totalNotes;
 
-		grade = ScoreUtils.AccuracyToGrade(accuracy) + (misses==0 ? " (FC)" : ""); // TODO: Diff types of FC?? (MFC, SFC, GFC, BFC, WTFC)
+		grade = ScoreUtils.AccuracyToGrade(accuracy) + (misses==0 ? " (FULL COMBO)" : ""); // TODO: Diff types of FC?? (MFC, SFC, GFC, BFC, WTFC)
 		missesTxt.text = "Miss: " + misses;
 		sicksTxt.text = "Sick: " + sicks;
 		goodsTxt.text = "Good: " + goods;
@@ -2234,8 +2246,6 @@ class PlayState extends MusicBeatState
 			{
 				resyncVocals();
 			}
-
-			updateTime = true;
 
 			if (!startTimer.finished)
 				startTimer.active = true;
@@ -2298,7 +2308,6 @@ class PlayState extends MusicBeatState
 			vocals.play();
 		}
 	}
-
 
 	private var paused:Bool = false;
 	var startedCountdown:Bool = false;
@@ -2414,11 +2423,6 @@ class PlayState extends MusicBeatState
 				else
 					phillyCityLights.members[curLight].alpha -= (Conductor.crochet / 1000) * FlxG.elapsed * 1.5;
 		}
-		if (luaModchartExists && lua != null){
-			lua.setGlobalVar('stepCrochet', Conductor.stepCrochet);
-			lua.setGlobalVar('crochet', Conductor.crochet);
-			lua.call("update", [elapsed]);
-		}
 
 		iconP1.visible = modchart.hudVisible;
 		iconP2.visible = modchart.hudVisible;
@@ -2431,9 +2435,9 @@ class PlayState extends MusicBeatState
 		missesTxt.visible = modchart.hudVisible;
 		highComboTxt.visible = modchart.hudVisible;
 		scoreTxt.visible = modchart.hudVisible;
+		botplayTxt.visible = modchart.hudVisible;
 		if(presetTxt!=null)
 			presetTxt.visible = modchart.hudVisible;
-
 
 		super.update(elapsed);
 
@@ -2526,6 +2530,8 @@ class PlayState extends MusicBeatState
 			FlxG.switchState(new Charting()); */
 
 		if (FlxG.keys.justPressed.EIGHT){
+			
+				AnimationDebug.isDad = true;
 				FlxG.switchState(new AnimationDebug(SONG.player2));
 				Cache.Clear();
 				#if windows
@@ -2536,7 +2542,8 @@ class PlayState extends MusicBeatState
 				#end
 			}
 			if (FlxG.keys.justPressed.NINE){
-				FlxG.switchState(new AnimationDebug(SONG.player1));
+				AnimationDebug.isDad = false;
+				FlxG.switchState(new AnimationDebug(SONG.player1,false));
 				Cache.Clear();
 				#if windows
 				if(lua!=null){
@@ -2545,6 +2552,7 @@ class PlayState extends MusicBeatState
 				}
 				#end
 			}
+
 		if (startingSong)
 		{
 			if (startedCountdown)
@@ -2557,7 +2565,12 @@ class PlayState extends MusicBeatState
 		else
 		{
 			// Conductor.songPosition = FlxG.sound.music.time;
-			Conductor.songPosition += FlxG.elapsed * 1000;
+			if(!endingSong)Conductor.songPosition += FlxG.elapsed * 1000;
+			if(Conductor.songPosition>=vocals.length){
+				dontSync=true;
+				vocals.volume=0;
+				vocals.stop();
+			}
 
 			if (!paused)
 			{
@@ -2572,35 +2585,36 @@ class PlayState extends MusicBeatState
 					// Conductor.songPosition += FlxG.elapsed * 1000;
 					// trace('MISSED FRAME');
 				}
-
-                if(currentOptions.TimeBar){
-				if(updateTime) {
-					var curTime:Float = Conductor.songPosition;
-					if(curTime < 0) curTime = 0;
-					songPercent = (curTime / songLength);
-
-					var songCalc:Float = (songLength - curTime);
-
-					var secondsTotal:Int = Math.floor(songCalc / 1000);
-					if(secondsTotal < 0) secondsTotal = 0;
-				}
-				}
 			}
 
 			// Conductor.lastSongPos = FlxG.sound.music.time;
 		}
-
 		try{
 			if(luaModchartExists && lua!=null)
 				lua.setGlobalVar("songPosition",Conductor.songPosition);
 		}catch(e:Any){
 			trace(e);
 		}
+		if (generatedMusic && PlayState.SONG.notes[Std.int(curStep / 16)] != null)
+		{
+			if (curBeat % 4 == 0)
+			{
+				// trace(PlayState.SONG.notes[Std.int(curStep / 16)].mustHitSection);
+			}
+			
+
+		}
 
 		if (camZooming)
 		{
-			FlxG.camera.zoom = FlxMath.lerp(FlxG.camera.zoom,defaultCamZoom, 0.05);
-			camHUD.zoom = FlxMath.lerp(camHUD.zoom,1, 0.05);
+			FlxG.camera.zoom = FlxMath.lerp(FlxG.camera.zoom,defaultCamZoom, 0.07);
+			camHUD.zoom = FlxMath.lerp(camHUD.zoom,defaultHudZoom, 0.07);
+		}
+		if (cz != defaultCamZoom){
+			//cz = defaultCamZoom;
+			
+			//if (camMoveTween != null) camMoveTween.cancel();
+			//camMoveTween = FlxTween.tween(FlxG.camera, {zoom:defaultCamZoom},Conductor.crochet/1000,{ease:FlxEase.sineInOut});
 		}
 
 		FlxG.watch.addQuick("beatShit", curBeat);
@@ -2823,7 +2837,7 @@ class PlayState extends MusicBeatState
 						if(daNote.tooLate)
 							daNote.alpha = .3;
 						else
-						daNote.alpha = FlxMath.lerp(.6, 0, 1-alpha);
+							daNote.alpha = FlxMath.lerp(.6, 0, (1-alpha));
 					}else{
 						if(daNote.tooLate)
 							daNote.alpha = .3;
@@ -2971,17 +2985,76 @@ class PlayState extends MusicBeatState
 
 		}
 
-		if(Conductor.songPosition-currentOptions.noteOffset>=FlxG.sound.music.length){
-			if(FlxG.sound.music.volume>0)
+		if (Conductor.songPosition - currentOptions.noteOffset >= FlxG.sound.music.length){
+			trace('song ending?????');
+			if(FlxG.sound.music.volume>0 || vocals.volume>0)
 				endSong();
 
 			FlxG.sound.music.volume=0;
 			vocals.volume=0;
 		}
-		#if debug
-		if (FlxG.keys.justPressed.ONE)
-			endSong();
-		#end
+
+		if (luaModchartExists && lua != null){
+			lua.setGlobalVar('stepCrochet', Conductor.stepCrochet);
+			lua.setGlobalVar('crochet', Conductor.crochet);
+			lua.call("update", [elapsed]);
+		}
+
+		if (FlxG.keys.justPressed.ONE){
+			KillNotes();
+			FlxG.sound.music.time = FlxG.sound.music.length;
+		}
+		//if (FlxG.keys.justPressed.TWO){
+			//setSongTime(Conductor.songPosition + 10000);
+			//clearNotesBefore(Conductor.songPosition);
+		//}
+	}
+
+	public function setSongTime(time:Float)
+	{
+		if(time < 0) time = 0;
+
+		FlxG.sound.music.pause();
+		vocals.pause();
+
+		FlxG.sound.music.time = time;
+		FlxG.sound.music.play();
+
+		vocals.time = time;
+		vocals.play();
+		Conductor.songPosition = time;
+	}
+	public function clearNotesBefore(time:Float)
+	{
+		var i:Int = unspawnNotes.length - 1;
+		while (i >= 0) {
+			var daNote:Note = unspawnNotes[i];
+			if(daNote.strumTime - 500 < time)
+			{
+				daNote.active = false;
+				daNote.visible = false;
+
+				daNote.kill();
+				unspawnNotes.remove(daNote);
+				daNote.destroy();
+			}
+			--i;
+		}
+
+		i = hittableNotes.length - 1;
+		while (i >= 0) {
+			var daNote:Note = hittableNotes[i];
+			if(daNote.strumTime - 500 < time)
+			{
+				daNote.active = false;
+				daNote.visible = false;
+
+				daNote.kill();
+				hittableNotes.remove(daNote);
+				daNote.destroy();
+			}
+			--i;
+		}
 	}
 
 	function cameraShits(bf:Bool,center:Bool=false){
@@ -3590,6 +3663,7 @@ class PlayState extends MusicBeatState
 			else
 				spr.centerOffsets();
 		});
+
 	}
 
 	private function oldKeyShit():Void
@@ -3882,63 +3956,6 @@ class PlayState extends MusicBeatState
 		vocals.volume = 1;
 		updateAccuracy();
 
-	}
-
-	function hurtNoteHit(note:Note):Void
-	{
-		combo=0;
-		totalNotes++;
-
-		var strumLine = playerStrumLines.members[note.noteData%4];
-
-		if(note.sustainLength==0 && !note.isSustainNote)
-			health -= .5;
-		else
-			health -= .25;
-		FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.3, 0.6));
-
-		previousHealth=health;
-		if(luaModchartExists && lua!=null)
-			lua.setGlobalVar("health",health);
-
-		//if(!note.isSustainNote){
-		switch(boyfriend.curCharacter){
-			case 'bf-christmas' | 'bf' | 'bf2':
-				boyfriend.playAnim('ouch',true);
-			default:
-				var anim = "";
-				switch (note.noteData)
-				{
-				case 0:
-					anim='singLEFTmiss';
-				case 1:
-					anim='singDOWNmiss';
-				case 2:
-					anim='singUPmiss';
-				case 3:
-					anim='singRIGHTmiss';
-				}
-
-
-				var canHold = note.isSustainNote && boyfriend.animation.getByName(anim+"Hold")!=null;
-				if(canHold && !boyfriend.animation.curAnim.name.startsWith(anim)){
-					boyfriend.playAnim(anim,true);
-				}else if(currentOptions.pauseHoldAnims && !canHold){
-					boyfriend.playAnim(anim,true);
-					if(note.holdParent)
-						boyfriend.holding=true;
-					else{
-						boyfriend.holding=false;
-					}
-
-
-				}else if(!currentOptions.pauseHoldAnims && !canHold){
-					boyfriend.playAnim(anim,true);
-				}
-		}
-
-		//}
-		updateAccuracy();
 	}
 
 	var fastCarCanDrive:Bool = true;
