@@ -1184,7 +1184,7 @@ class PlayState extends MusicBeatState
 			lua.setGlobalVar("X","X");
 			lua.setGlobalVar("Y","Y");
 			lua.setGlobalVar("version",SONG.version);
-			lua.setGlobalVar("GameVersion",1.2);
+			lua.setGlobalVar("GameVersion",0.2.7.1);
 
 			Lua_helper.add_callback(lua.state,"skipCountdown", function(){
 				skipCountdown = true;
