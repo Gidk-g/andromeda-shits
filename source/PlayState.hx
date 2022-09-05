@@ -6,6 +6,7 @@ import Discord.DiscordClient;
 import Options;
 import Section.SwagSection;
 import Song.SwagSong;
+import lime.app.Application;
 import WiggleEffect.WiggleEffectType;
 import flixel.FlxBasic;
 import flixel.FlxCamera;
@@ -1184,7 +1185,7 @@ class PlayState extends MusicBeatState
 			lua.setGlobalVar("X","X");
 			lua.setGlobalVar("Y","Y");
 			lua.setGlobalVar("version",SONG.version);
-			lua.setGlobalVar("GameVersion",0.2.7.1);
+			lua.setGlobalVar("GameVersion",Application.current.meta.get('version'));
 
 			Lua_helper.add_callback(lua.state,"skipCountdown", function(){
 				skipCountdown = true;
