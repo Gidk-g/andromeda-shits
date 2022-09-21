@@ -194,13 +194,13 @@ class Checkbox extends FlxSprite
 	public function new(state:Bool){
 		super();
 		this.state=state;
-		//frames = Paths.getSparrowAtlas("checkboxThingie"); // THANKS NINJAMUFFIN ILY SO MUCH I JUST CANT MAKE A GOOD CHECKBOX OK :(
-		frames = Paths.getSparrowAtlas("checkbox");
+		frames = Paths.getSparrowAtlas("checkboxThingie"); // THANKS NINJAMUFFIN ILY SO MUCH I JUST CANT MAKE A GOOD CHECKBOX OK :(
+		//frames = Paths.getSparrowAtlas("checkbox");
 		updateHitbox();
-		//animation.addByPrefix("unselected","Check Box unselected",24,false);
-		//animation.addByPrefix("selecting","Check Box selecting animation",24,false);
-		animation.addByIndices("unselected","confirm",[0],"",36,false);
-		animation.addByPrefix("selecting","confirm",36,false);
+		animation.addByPrefix("unselected","Check Box unselected",24,false);
+		animation.addByPrefix("selecting","Check Box selecting animation",24,false);
+		//animation.addByIndices("unselected","confirm",[0],"",36,false);
+		//animation.addByPrefix("selecting","confirm",36,false);
 		var reversedindices = []; // man i hate haxe I DONT WANNA DO A TABI CODE :(((
 			// PROBABLY A BETTER WAY TO DO THIS
 			// I DONT CARE I CANT CODE
@@ -209,12 +209,12 @@ class Checkbox extends FlxSprite
 		for(i in max){
 			reversedindices.push(i-2);
 		}
-		//animation.addByIndices("unselecting","Check Box selecting animation",reversedindices,"",24,false);
-		//animation.addByPrefix("selected","Check Box Selected Static",24,false);
-		animation.addByIndices("unselecting","confirm",reversedindices,"",36,false);
-		animation.addByIndices("selected","confirm",[animation.getByName("selecting").frames.length-2],"",36,false);
+		animation.addByIndices("unselecting","Check Box selecting animation",reversedindices,"",24,false);
+		animation.addByPrefix("selected","Check Box Selected Static",24,false);
+		//animation.addByIndices("unselecting","confirm",reversedindices,"",36,false);
+		//animation.addByIndices("selected","confirm",[animation.getByName("selecting").frames.length-2],"",36,false);
 		antialiasing=true;
-		setGraphicSize(Std.int(width*.6) );
+		setGraphicSize(Std.int(0.7 * width));
 		updateHitbox();
 		if(state)
 			animation.play("selected");
@@ -252,20 +252,14 @@ class Checkbox extends FlxSprite
 
 			switch(animation.curAnim.name){
 				case 'selecting' | 'unselecting':
-					//offset.x=18;
-					//offset.y=70;
-					offset.x=0;
-					offset.y=0;
+					offset.x=18;
+					offset.y=70;
 				case 'unselected':
-					//offset.x=0;
-					//offset.y=0;
 					offset.x=0;
 					offset.y=0;
 				case 'selected':
-					//offset.x=10;
-					//offset.y=49.7;
-					offset.x=0;
-					offset.y=0;
+					offset.x=10;
+					offset.y=49.7;
 			}
 		}
 

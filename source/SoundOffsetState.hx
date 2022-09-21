@@ -31,14 +31,13 @@ class SoundOffsetState extends MusicBeatState
     // Updating Discord Rich Presence
     DiscordClient.changePresence("Calibrating audio", null);
     #end
-    var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image("menuDesat"));
 
-    menuBG.color = 0xFFa271de;
-    menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
-    menuBG.updateHitbox();
-    menuBG.screenCenter();
-    menuBG.antialiasing = true;
-    add(menuBG);
+		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
+		menuBG.color = 0xFFea71fd;
+		menuBG.updateHitbox();
+		menuBG.screenCenter();
+		menuBG.antialiasing = true;
+		add(menuBG);
 
     var title:FlxText = new FlxText(0, 20, 0, "Audio Calibration", 32);
     title.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);

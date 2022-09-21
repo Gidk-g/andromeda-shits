@@ -32,7 +32,7 @@ class OptionsMenu extends MusicBeatState
 			new OptionCategory("Modifiers",[
 				new ToggleOption("failForMissing","Sudden Death"),
 			]),
-			new ScrollOption("ratingWindow",0,OptionUtils.ratingWindowNames.length-1,OptionUtils.ratingWindowNames),
+			//new ScrollOption("ratingWindow",0,OptionUtils.ratingWindowNames.length-1,OptionUtils.ratingWindowNames),
 			new ToggleOption("ghosttapping","Ghost-tapping"),
 			new ToggleOption("botPlay","BotPlay"),
 			new StateOption("Calibrate Offset",new SoundOffsetState()),
@@ -69,9 +69,9 @@ class OptionsMenu extends MusicBeatState
 		DiscordClient.changePresence("Changing options", null);
 		#end
 		category=defCat;
-		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image("menuDesat"));
-		menuBG.color = 0xFFa271de;
-		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
+
+		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
+		menuBG.color = 0xFFea71fd;
 		menuBG.updateHitbox();
 		menuBG.screenCenter();
 		menuBG.antialiasing = true;

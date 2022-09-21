@@ -158,6 +158,8 @@ class PlayState extends MusicBeatState
 
 	public static var instance:PlayState;
 
+	var scoreTxtTween:FlxTween;
+
 	public var playerNoteOffsets:Array<Array<Float>> = [
 		[0,0], // left
 		[0,0], // down
@@ -1053,19 +1055,15 @@ class PlayState extends MusicBeatState
 		timeBarBG.sprTracker = timeBar;
 
 		switch(SONG.player1){
-			case 'bf-neb':
-				p1Color = 0xFF9534EB;
-			case 'bf' | 'bf-car' | 'bf-pixel' | 'bf-christmas':
-				p1Color = 0xFF31B0D1;
+			case 'bf':
+			    p1Color = 0xFF66FF33;
 			default:
 				p1Color = 0xFF66FF33;
 		}
 
 		switch(SONG.player2){
-			case 'bf-neb':
-				p2Color = 0xFF9534EB;
-			case 'bf' | 'bf-car' | 'bf-pixel' | 'bf-christmas':
-				p2Color = 0xFF31B0D1;
+			case 'bf':
+			    p2Color=0xFFFF0000;
 			default:
 				p2Color=0xFFFF0000;
 		}
@@ -1076,9 +1074,10 @@ class PlayState extends MusicBeatState
 		// healthBar
 		add(healthBar);
 
-		scoreTxt = new FlxText(healthBarBG.x + healthBarBG.width / 2 - 150, healthBarBG.y + 50, 0, "", 20);
-		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		scoreTxt = new FlxText(0, healthBarBG.y + 36, FlxG.width, "", 20);
+		scoreTxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
+		scoreTxt.borderSize = 1.25;
 		add(scoreTxt);
 
 		botplayTxt = new FlxText(400, timeBarBG.y + 55, FlxG.width - 800, "BOTPLAY", 32);
@@ -1134,13 +1133,13 @@ class PlayState extends MusicBeatState
 			presetTxt.visible=true;
 		}
 
-		add(highComboTxt);
-		add(sicksTxt);
-		add(goodsTxt);
-		add(badsTxt);
-		add(shitsTxt);
-		add(missesTxt);
-		add(presetTxt);
+		//add(highComboTxt);
+		//add(sicksTxt);
+		//add(goodsTxt);
+		//add(badsTxt);
+		//add(shitsTxt);
+		//add(missesTxt);
+		//add(presetTxt);
 
 		iconP1 = new HealthIcon(SONG.player1, true);
 		add(iconP1);
@@ -2307,6 +2306,23 @@ class PlayState extends MusicBeatState
 			Conductor.songPosition = FlxG.sound.music.time;
 			vocals.time = Conductor.songPosition;
 			vocals.play();
+		}
+	}
+
+	public function updateScore(miss:Bool = false)
+	{
+		if(!miss)
+		{
+			if(scoreTxtTween != null) {
+				scoreTxtTween.cancel();
+			}
+			scoreTxt.scale.x = 1.075;
+			scoreTxt.scale.y = 1.075;
+			scoreTxtTween = FlxTween.tween(scoreTxt.scale, {x: 1, y: 1}, 0.2, {
+				onComplete: function(twn:FlxTween) {
+					scoreTxtTween = null;
+				}
+			});
 		}
 	}
 
@@ -3875,7 +3891,7 @@ class PlayState extends MusicBeatState
 
 	}
 
-	function goodNoteHit(note:Note):Void
+	function goodNoteHit(note:Note, badHit:Bool = false):Void
 	{
 		if (!note.isSustainNote)
 		{
@@ -3890,6 +3906,11 @@ class PlayState extends MusicBeatState
 			hitNotes++;
 			totalNotes++;
 		}
+
+		if (badHit)
+			updateScore(true); // miss notes shouldn't make the scoretxt bounce -Ghost
+		else
+			updateScore(false);
 
 		if(currentOptions.hitSound && !note.isSustainNote)
 			FlxG.sound.play(Paths.sound('Normal_Hit'),1);
