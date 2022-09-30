@@ -169,11 +169,15 @@ class Paths
 	}
 	
 	inline static public function lua(script:String,?library:String){
-			return getPath('data/$script.lua',TEXT,library);
+		return getPath('data/$script.lua',TEXT,library);
 	}
 
 	inline static public function modchart(song:String,?library:String){
 		return getPath('data/$song/modchart.lua',TEXT,library);
+	}
+
+	inline static public function luaStage(key:String,?library:String){
+		return getPath('stages/$key.lua',TEXT,library);
 	}
 
 	inline static public function image(key:String, ?library:String):Any

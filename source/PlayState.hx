@@ -338,7 +338,7 @@ class PlayState extends MusicBeatState
 
 
 
-		grade = ScoreUtils.gradeArray[0] + " (FC)";
+		grade = ScoreUtils.gradeArray[0] + " - FC";
 		hitNotes=0;
 		totalNotes=0;
 		misses=0;
@@ -811,7 +811,11 @@ class PlayState extends MusicBeatState
 		          }
 		          default:
 		          {
-											if(SONG.noBG!=true){
+					if (FileSystem.exists(Paths.luaStage('${SONG.stage}'))) {
+						curStage = SONG.stage;
+                        luaModchartExists = FileSystem.exists(Paths.luaStage('${SONG.stage}'));
+					} else {
+						if(SONG.noBG!=true){
 		                  defaultCamZoom = 1;
 		                  curStage = 'stage';
 		                  var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.image('stageback'));
@@ -836,9 +840,10 @@ class PlayState extends MusicBeatState
 		                  stageCurtains.active = false;
 
 		                  add(stageCurtains);
-										}else{
-											curStage='custom';
-										}
+						}else{
+							curStage='custom';
+						}
+					}
 		          }
               }
 
@@ -2214,7 +2219,7 @@ class PlayState extends MusicBeatState
 		else
 			accuracy = hitNotes / totalNotes;
 
-		grade = ScoreUtils.AccuracyToGrade(accuracy) + (misses==0 ? " (FC)" : ""); // TODO: Diff types of FC?? (MFC, SFC, GFC, BFC, WTFC)
+		grade = ScoreUtils.AccuracyToGrade(accuracy) + (misses==0 ? " - FC" : ""); // TODO: Diff types of FC?? (MFC, SFC, GFC, BFC, WTFC)
 		missesTxt.text = "Miss: " + misses;
 		sicksTxt.text = "Sick: " + sicks;
 		goodsTxt.text = "Good: " + goods;
@@ -2463,7 +2468,7 @@ class PlayState extends MusicBeatState
 			botplayTxt.alpha = 1 - Math.sin((Math.PI * botplaySine) / 180);
 		}
 
-		scoreTxt.text = "Score:" + songScore + " | Misses:" + misses + " | Accuracy:" + truncateFloat(accuracy*100, 2) + "% | " + grade;
+		scoreTxt.text = "Score: " + songScore + " | Misses: " + misses + " | Accuracy: " + truncateFloat(accuracy*100, 2) + "% | " + grade;
 
 		if(misses>0 && currentOptions.failForMissing){
 			health=0;
