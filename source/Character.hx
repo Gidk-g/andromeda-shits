@@ -509,11 +509,11 @@ class Character extends FlxSprite
 
 		    if(FileSystem.exists(Paths.hx("characters/" + curCharacter)))
 		    {
-			script = new HScriptHandler(Paths.hx("characters/" + curCharacter));
+			    script = new HScriptHandler(Paths.hx("characters/" + curCharacter));
 
-			script.interp.variables.set("character", this);
+			    script.interp.variables.set("character", this);
 
-			script.callFunction("createCharacter", [curCharacter, isPlayer]);
+			    script.callFunction("createCharacter", [curCharacter, isPlayer]);
 		    }
 
 
@@ -675,6 +675,9 @@ class Character extends FlxSprite
 
 	override function update(elapsed:Float)
 	{
+		if(script != null)
+			script.update(elapsed);
+
 		if(holding)
 			animation.curAnim.curFrame=0;
 
@@ -777,7 +780,6 @@ class Character extends FlxSprite
 				danced = !danced;
 			}
 		}
-		
 	}
 
 	public function addOffset(name:String, x:Float = 0, y:Float = 0)
