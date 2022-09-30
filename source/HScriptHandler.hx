@@ -1,6 +1,7 @@
 package;
 
 import sys.io.File;
+import sys.FileSystem;
 import openfl.utils.Assets;
 import hscript.Parser;
 import hscript.Expr;
@@ -74,6 +75,8 @@ class HScriptHandler
         // global class shit
 
         // haxeflixel classes
+        interp.variables.set("File", File);
+        interp.variables.set("FileSystem", FileSystem);
         interp.variables.set("FlxG", flixel.FlxG);
         interp.variables.set("Polymod", polymod.Polymod);
         interp.variables.set("Assets", openfl.utils.Assets);
