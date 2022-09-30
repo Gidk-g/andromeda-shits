@@ -25,6 +25,7 @@ class Character extends FlxSprite
 	public var curAnim:String = "";
 	public var holdTimer:Float = 0;
 	public var camOffset:Array<Int> = [0,0];
+	public var script:HScriptHandler;
 	public var danceSpeed:Int = 1;
 	public static var charsBitmaps:Map<String,FlxGraphic> = new Map<String,FlxGraphic>();
 	public function new(x:Float, y:Float, ?character:String = "bf", ?isPlayer:Bool = false)

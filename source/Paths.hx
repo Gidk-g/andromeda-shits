@@ -97,6 +97,11 @@ class Paths
 		return getPath('data/$key.xml', TEXT, library);
 	}
 
+	inline static public function hx(key:String, ?library:String)
+	{
+		return getPath('$key.hx', TEXT, library);
+	}
+
 	inline static public function json(key:String, ?library:String)
 	{
 		
@@ -178,6 +183,10 @@ class Paths
 
 	inline static public function luaStage(key:String,?library:String){
 		return getPath('stages/$key.lua',TEXT,library);
+	}
+
+	inline static public function luaCutscenes(key:String,?library:String){
+		return getPath('cutscenes/$key.lua',TEXT,library);
 	}
 
 	inline static public function image(key:String, ?library:String):Any
