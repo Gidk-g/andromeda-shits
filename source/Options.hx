@@ -25,6 +25,11 @@ class OptionUtils
 		"BSide Philly",
 		"Dream",
 	];
+	public static var timeBarTypeNames:Array<String>=[
+		"Time Elapsed",
+		"Song Name",
+		"Disabled",
+	];
 	public static var ratingWindowTypes:Array<Array<Float>> = [ // TODO: make these all properly scale w/ the safeZoneOffset n shit
 		[ // Vanilla
 			32, // sick
@@ -135,7 +140,7 @@ class Options
 	public var dummy:Bool = false;
 	public var dummyInt:Int = 0;
 	public var ratingWindow:Int = 0;
-	public var TimeBar:Bool = true;
+	public var timeBarType:Int = 0;
 	public var showMS:Bool = false;
 	public var ratingInHUD:Bool = false;
 	public var noteOffset:Int = 0;

@@ -1070,24 +1070,31 @@ class PlayState extends MusicBeatState
 		var p2Color = 0xFFFF0000; // TODO: GIVE EVERYONE CUSTOM HP BAR COLOURS!!!
 		// AND MAKE IT BETTER WITH A NOTEPAD FILE OR SOMETHING!!
 
-		var showTime:Bool = (currentOptions.TimeBar);
+		var showTime:Bool = (currentOptions.timeBarType != 3);
 		timeTxt = new FlxText(STRUM_X + (FlxG.width / 2) - 248, 19, 400, "", 32);
 		timeTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		timeTxt.scrollFactor.set();
 		timeTxt.alpha = 0;
 		timeTxt.borderSize = 2;
+		timeTxt.visible = showTime;
 		if(currentOptions.downScroll) timeTxt.y = FlxG.height - 44;
 
-		updateTime = true;
+		if(currentOptions.timeBarType != 2)
+		{
+			timeTxt.text = SONG.song;
+		}
+		updateTime = showTime;
 
 		timeBarBG = new AttachedSprite('timeBar');
 		timeBarBG.x = timeTxt.x;
 		timeBarBG.y = timeTxt.y + (timeTxt.height / 4);
 		timeBarBG.scrollFactor.set();
 		timeBarBG.alpha = 0;
+		timeBarBG.visible = showTime;
 		timeBarBG.color = FlxColor.BLACK;
 		timeBarBG.xAdd = -4;
 		timeBarBG.yAdd = -4;
+		add(timeBarBG);
 
 		timeBar = new FlxBar(timeBarBG.x + 4, timeBarBG.y + 4, LEFT_TO_RIGHT, Std.int(timeBarBG.width - 8), Std.int(timeBarBG.height - 8), this,
 			'songPercent', 0, 1);
@@ -1095,7 +1102,16 @@ class PlayState extends MusicBeatState
 		timeBar.createFilledBar(0xFF000000, 0xFFFFFFFF);
 		timeBar.numDivisions = 800; //How much lag this causes?? Should i tone it down to idk, 400 or 200?
 		timeBar.alpha = 0;
+		timeBar.visible = showTime;
+		add(timeBar);
+		add(timeTxt);
 		timeBarBG.sprTracker = timeBar;
+
+		if(currentOptions.timeBarType != 2)
+		{
+			timeTxt.size = 24;
+			timeTxt.y += 3;
+		}
 
 		switch(SONG.player1){
 			case 'bf':
@@ -2548,6 +2564,9 @@ class PlayState extends MusicBeatState
 		highComboTxt.visible = modchart.hudVisible;
 		scoreTxt.visible = modchart.hudVisible;
 		botplayTxt.visible = modchart.hudVisible;
+		timeBarBG.visible = modchart.hudVisible;
+		timeBar.visible = modchart.hudVisible;
+	    timeTxt.visible = modchart.hudVisible;
 		if(presetTxt!=null)
 			presetTxt.visible = modchart.hudVisible;
 
@@ -2695,6 +2714,21 @@ class PlayState extends MusicBeatState
 					Conductor.lastSongPos = Conductor.songPosition;
 					// Conductor.songPosition += FlxG.elapsed * 1000;
 					// trace('MISSED FRAME');
+				}
+
+				if(updateTime) {
+					var curTime:Float = Conductor.songPosition;
+					if(curTime < 0) curTime = 0;
+					songPercent = (curTime / songLength);
+
+					var songCalc:Float = (songLength - curTime);
+					if(currentOptions.timeBarType != 1) songCalc = curTime;
+
+					var secondsTotal:Int = Math.floor(songCalc / 1000);
+					if(secondsTotal < 0) secondsTotal = 0;
+
+					if(currentOptions.timeBarType != 2)
+						timeTxt.text = FlxStringUtil.formatTime(secondsTotal, false);
 				}
 			}
 
@@ -3252,6 +3286,9 @@ class PlayState extends MusicBeatState
 	{
 		endingSong = true;
 		TitleState.curDir = "assets";
+		timeBarBG.visible = false;
+		timeBar.visible = false;
+		timeTxt.visible = false;
 		canPause = false;
 		FlxG.sound.music.volume = 0;
 		vocals.volume = 0;
