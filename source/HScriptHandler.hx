@@ -77,6 +77,7 @@ class HScriptHandler
         // haxeflixel classes
         interp.variables.set("File", File);
         interp.variables.set("FileSystem", FileSystem);
+        interp.variables.set("BGSprite", BGSprite);
         interp.variables.set("FlxG", flixel.FlxG);
         interp.variables.set("Polymod", polymod.Polymod);
         interp.variables.set("Assets", openfl.utils.Assets);
@@ -84,6 +85,11 @@ class HScriptHandler
         interp.variables.set("FlxSprite", flixel.FlxSprite);
         interp.variables.set("Math", Math);
         interp.variables.set("FlxMath", flixel.math.FlxMath);
+        interp.variables.set("MusicBeatState", MusicBeatState);
+        interp.variables.set("Alphabet", Alphabet);
+        interp.variables.set("AttachedFlxText", AttachedFlxText);
+        interp.variables.set("AttachedSprite", AttachedSprite);
+        interp.variables.set("TitleState", TitleState);
         interp.variables.set("Std", Std);
         interp.variables.set("StringTools", StringTools);
 
@@ -113,6 +119,8 @@ class HScriptHandler
         interp.variables.set("Conductor", Conductor);
         interp.variables.set("Paths", Paths);
         interp.variables.set("CoolUtil", CoolUtil);
+        interp.variables.set("Note", Note);
+        interp.variables.set("Song", Song);
 
         // function shits
         interp.variables.set("trace", function(value:Dynamic) {
@@ -137,6 +145,7 @@ class HScriptHandler
         });
 
         interp.variables.set("otherScripts", other_scripts);
+        interp.variables.set("currentOptions", PlayState.instance.currentOptions);
 
         // playstate local shit
         interp.variables.set("bf", PlayState.instance.boyfriend);
