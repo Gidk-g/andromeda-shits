@@ -503,19 +503,15 @@ class Character extends FlxSprite
 						Cache.charFrames[curCharacter]=frames;
 					}
 			}
-			
-			FlxG.bitmap.dumpCache();
 
+			FlxG.bitmap.dumpCache();
 
 		    if(FileSystem.exists(Paths.hx("characters/" + curCharacter)))
 		    {
 			    script = new HScriptHandler(Paths.hx("characters/" + curCharacter));
-
 			    script.interp.variables.set("character", this);
-
 			    script.callFunction("createCharacter", [curCharacter, isPlayer]);
 		    }
-
 
 			loadAnimations();
 			loadOffsets();

@@ -1,0 +1,22 @@
+{
+	"songs": [
+		{
+			"name": "Senpai"
+		},
+		{
+			"name": "Roses"
+		},
+		{
+			"name": "Thorns"
+		}
+	],
+	"characters": [
+		"senpai",
+		"bf",
+		"gf"
+	],
+	"name": "Hating Simulator ft. Moawling",
+	"locked": false,
+	"unlockAfter": "",
+	"hiddenUntilUnlocked": false
+}

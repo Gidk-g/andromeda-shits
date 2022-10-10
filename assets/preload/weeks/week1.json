@@ -1,0 +1,22 @@
+{
+	"songs": [
+		{
+			"name": "Bopeebo"
+		},
+		{
+			"name": "Fresh"
+		},
+		{
+			"name": "Dadbattle"
+		}
+	],
+	"characters": [
+		"dad",
+		"bf",
+		"gf"
+	],
+	"name": "Daddy Dearest",
+	"locked": false,
+	"unlockAfter": "",
+	"hiddenUntilUnlocked": false
+}

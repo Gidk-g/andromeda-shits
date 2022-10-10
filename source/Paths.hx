@@ -25,6 +25,7 @@ using StringTools;
 class Paths
 {
 	inline public static var SOUND_EXT = #if web "mp3" #else "ogg" #end;
+	inline public static var VIDEO_EXT = "mp4";
 
 	static var currentLevel:String;
 	public static var imgCache:Map<String,FlxGraphic> = new Map<String,FlxGraphic>();
@@ -87,6 +88,11 @@ class Paths
 		return getPath('data/$key.txt', TEXT, library);
 	}
 
+	inline static public function ttxt(key:String, ?library:String)
+	{
+		return getPath('$key.txt', TEXT, library);
+	}
+
 	inline static public function txtImages(key:String, ?library:String)
 	{
 		return getPath('images/$key.txt', TEXT, library);
@@ -95,6 +101,11 @@ class Paths
 	inline static public function xml(key:String, ?library:String)
 	{
 		return getPath('data/$key.xml', TEXT, library);
+	}
+
+	inline static public function xxml(key:String, ?library:String)
+	{
+		return getPath('images/$key.xml', TEXT, library);
 	}
 
 	inline static public function hx(key:String, ?library:String)
@@ -108,11 +119,20 @@ class Paths
 		return getPath('data/$key.json', TEXT, library);
 	}
 
+	inline static public function jjson(key:String, ?library:String)
+	{
+		
+		return getPath('$key.json', TEXT, library);
+	}
+
 	inline static public function spritejson(key:String, ?library:String)
 	{
 		
 		return getPath('images/$key.json', TEXT, library);
 	}
+
+	inline static public function formatName(name:String):String
+		return name.replace(' ', '-').toLowerCase();
 
 	static public function sound(key:String, ?library:String):Any
 	{
@@ -208,13 +228,16 @@ class Paths
 		return getPath('images/$key.png', IMAGE, library);
 	}
 
-	inline static public function font(key:String)
+	inline static public function font(key:String, ?library:String)
 	{
-		return 'assets/fonts/$key';
+		return getPath('fonts/$key', TEXT, library);
 	}
-	
-	
-	
+
+	inline static public function video(key:String, ?library:String)
+	{
+		return getPath('videos/$key.$VIDEO_EXT', TEXT, library);
+	}
+
 	static public function getbmp(key:String,includePath:Bool=true):FlxGraphic{
 		
 		if (!imgCache.exists(key)){

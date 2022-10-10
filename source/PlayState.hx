@@ -63,6 +63,10 @@ import llua.LuaL;
 import sys.io.File;
 import animateatlas.AtlasFrameMaker;
 
+#if VIDEOS_ALLOWED
+import vlc.MP4Handler;
+#end
+
 using StringTools;
 
 class PlayState extends MusicBeatState
@@ -292,14 +296,13 @@ class PlayState extends MusicBeatState
 
 	var inCutscene:Bool = false;
 
-	#if desktop
+	public static var storyDifficultyText:String = "";
+
 	// Discord RPC variables
-	var storyDifficultyText:String = "";
-	var iconRPC:String = "";
-	var songLength:Float = 0;
-	var detailsText:String = "";
-	var detailsPausedText:String = "";
-	#end
+	public var iconRPC:String = "";
+	public var songLength:Float = 0;
+	public var detailsText:String = "";
+	public var detailsPausedText:String = "";
 
 	override public function create()
 	{
@@ -1835,6 +1838,45 @@ class PlayState extends MusicBeatState
 		});
 	}
 
+	public function startVideo(name:String)
+	{
+		#if VIDEOS_ALLOWED
+		inCutscene = true;
+
+		var filepath:String = Paths.video(name);
+		#if sys
+		if(!FileSystem.exists(filepath))
+		#else
+		if(!OpenFlAssets.exists(filepath))
+		#end
+		{
+			FlxG.log.warn('Couldnt find video file: ' + name);
+			startAndEnd();
+			return;
+		}
+
+		var video:MP4Handler = new MP4Handler();
+		video.playVideo(filepath);
+		video.finishCallback = function()
+		{
+			startAndEnd();
+			return;
+		}
+		#else
+		FlxG.log.warn('Platform not supported!');
+		startAndEnd();
+		return;
+		#end
+	}
+
+	function startAndEnd()
+	{
+		if(endingSong)
+			endSong();
+		else
+			startCountdown();
+	}
+
 	var startTimer:FlxTimer;
 	var perfectMode:Bool = false;
 
@@ -2492,22 +2534,10 @@ class PlayState extends MusicBeatState
 	// https://github.com/Quaver/Quaver
 	// https://github.com/Quaver/Quaver
 
-	var fixedUpdateFPS:Int = 60;
-
 	override public function update(elapsed:Float)
 	{
 		if (script != null)
 			script.update(elapsed);
-
-		if (script != null)
-			script.callFunction("fixedUpdate", [fixedUpdateFPS]);
-
-		if (gf.script != null)
-			gf.script.callFunction("fixedUpdate", [fixedUpdateFPS]);
-		if (dad.script != null)
-			dad.script.callFunction("fixedUpdate", [fixedUpdateFPS]);
-		if (boyfriend.script != null)
-			boyfriend.script.callFunction("fixedUpdate", [fixedUpdateFPS]);
 
 		#if !debug
 		perfectMode = false;
@@ -2776,9 +2806,6 @@ class PlayState extends MusicBeatState
 					gfSpeed = 2;
 				case 112:
 					gfSpeed = 1;
-				case 163:
-					// FlxG.sound.music.stop();
-					// FlxG.switchState(new TitleState());
 			}
 		}
 
@@ -2796,8 +2823,6 @@ class PlayState extends MusicBeatState
 			{
 				case 128, 129, 130:
 					vocals.volume = 0;
-					// FlxG.sound.music.stop();
-					// FlxG.switchState(new PlayState());
 			}
 		}
 		// better streaming of shit
@@ -3312,17 +3337,13 @@ class PlayState extends MusicBeatState
 
 			if (storyPlaylist.length <= 0)
 			{
-
-				FlxG.sound.playMusic(Paths.music('freakyMenu'));
-
 				transIn = FlxTransitionableState.defaultTransIn;
 				transOut = FlxTransitionableState.defaultTransOut;
 
 				FlxG.switchState(new StoryMenuState());
 				Cache.Clear();
 
-				// if ()
-				StoryMenuState.weekUnlocked[Std.int(Math.min(storyWeek + 1, StoryMenuState.weekUnlocked.length - 1))] = true;
+				StoryMenuState.weekCompleted.set(StoryMenuState.loadedWeekList[storyWeek], true);
 
 				if (SONG.validScore)
 				{
@@ -3330,17 +3351,10 @@ class PlayState extends MusicBeatState
 					Highscore.saveWeekScore(storyWeek, campaignScore, storyDifficulty);
 				}
 
-				FlxG.save.data.weekUnlocked = StoryMenuState.weekUnlocked;
+				FlxG.save.data.weekCompleted = StoryMenuState.weekCompleted;
 				FlxG.save.flush();
+				FlxG.sound.music.stop();
 				trace(SONG.song.toLowerCase());
-				if (SONG.song.toLowerCase() == 'tutorial'){
-					FlxG.switchState(new CutsceneState("mods/introMod/_append/video.mp4", function(){
-						FlxG.switchState(new CutsceneState("assets/videos/videa.mp4", CutsceneState.end ));
-					}));
-				}else{
-				FlxG.sound.playMusic(Paths.music('freakyMenu'));
-					CutsceneState.end();
-				}
 			}
 			else
 			{

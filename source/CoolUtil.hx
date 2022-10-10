@@ -28,6 +28,11 @@ class CoolUtil
 		return daList;
 	}
 
+	public static function camLerpShit(ratio:Float):Float
+		return FlxG.elapsed / (1 / 60) * ratio;
+
+	public static function coolLerp(a:Float, b:Float, ratio:Float):Float
+		return a + camLerpShit(ratio) * (b - a);
 
 	public static function getColorFromHex(color:String) {
 		if(!color.startsWith('0x')) color = '0xff' + color;

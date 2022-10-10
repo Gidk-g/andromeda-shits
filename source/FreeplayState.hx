@@ -257,7 +257,7 @@ class FreeplayState extends MusicBeatState
 			
 		var poop:String = Highscore.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty);
 		if (!FileSystem.exists(TitleState.curDir+'/data/'+songs[curSelected].songName.toLowerCase()+'/'+poop+'.json')){
-			curDifficulty = 1;
+			//curDifficulty = 1;
 		}
 		#if !switch
 		intendedScore = Highscore.getScore(songs[curSelected].songName, curDifficulty);

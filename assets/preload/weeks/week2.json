@@ -1,0 +1,22 @@
+{
+	"songs": [
+		{
+			"name": "Spookeez"
+		},
+		{
+			"name": "South"
+		},
+		{
+			"name": "Monster"
+		}
+	],
+	"characters": [
+		"spooky",
+		"bf",
+		"gf"
+	],
+	"locked": false,
+	"unlockAfter": "",
+	"name": "Spooky Month",
+	"hiddenUntilUnlocked": false
+}

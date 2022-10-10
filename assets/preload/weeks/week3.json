@@ -1,0 +1,22 @@
+{
+	"songs": [
+		{
+			"name": "Pico"
+		},
+		{
+			"name": "Philly"
+		},
+		{
+			"name": "Blammed"
+		}
+	],
+	"characters": [
+		"pico",
+		"bf",
+		"gf"
+	],
+	"name": "Pico",
+	"locked": false,
+	"unlockAfter": "",
+	"hiddenUntilUnlocked": false
+}

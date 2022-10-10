@@ -1,0 +1,22 @@
+{
+	"songs": [
+		{
+			"name": "Cocoa"
+		},
+		{
+			"name": "Eggnog"
+		},
+		{
+			"name": "Winter-Horrorland"
+		}
+	],
+	"characters": [
+		"parents-christmas",
+		"bf",
+		"gf"
+	],
+	"name": "Red Show",
+	"locked": false,
+	"unlockAfter": "",
+	"hiddenUntilUnlocked": false
+}
