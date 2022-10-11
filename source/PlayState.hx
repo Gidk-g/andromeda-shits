@@ -270,6 +270,8 @@ class PlayState extends MusicBeatState
 	var shits:Float = 0;
 	var luaModchartExists = false;
 
+	public var introSoundsSuffix:String = '';
+
 	private var timeBarBG:AttachedSprite;
 	public var timeBar:FlxBar;
 
@@ -857,6 +859,10 @@ class PlayState extends MusicBeatState
               }
 
 		allScriptCall("createStage");
+
+		if(curStage.startsWith('school')) {
+			introSoundsSuffix = '-pixel';
+		}
 
 		var gfVersion:String = 'gf';
 
@@ -1930,7 +1936,7 @@ class PlayState extends MusicBeatState
 
 			{
 				case 0:
-					FlxG.sound.play(Paths.sound(assetPrefix+'intro3'+assetSuffix), 0.6);
+					FlxG.sound.play(Paths.sound('intro3' + introSoundsSuffix), 0.6);
 				case 1:
 					var ready:FlxSprite = new FlxSprite().loadGraphic(Paths.image(introAlts[0]));
 					ready.scrollFactor.set();
@@ -1948,7 +1954,7 @@ class PlayState extends MusicBeatState
 							ready.destroy();
 						}
 					});
-					FlxG.sound.play(Paths.sound(assetPrefix+'intro2'+assetSuffix), 0.6);
+					FlxG.sound.play(Paths.sound('intro2' + introSoundsSuffix), 0.6);
 				case 2:
 					var set:FlxSprite = new FlxSprite().loadGraphic(Paths.image(introAlts[1]));
 					set.scrollFactor.set();
@@ -1966,7 +1972,7 @@ class PlayState extends MusicBeatState
 							set.destroy();
 						}
 					});
-					FlxG.sound.play(Paths.sound(assetPrefix+'intro1'+assetSuffix), 0.6);
+					FlxG.sound.play(Paths.sound('intro1' + introSoundsSuffix), 0.6);
 				case 3:
 					if(!skipCountdown){
 						var go:FlxSprite = new FlxSprite().loadGraphic(Paths.image(introAlts[2]));
@@ -1987,7 +1993,7 @@ class PlayState extends MusicBeatState
 								go.destroy();
 							}
 						});
-						FlxG.sound.play(Paths.sound(assetPrefix+'introGo'+assetSuffix), 0.6);
+					FlxG.sound.play(Paths.sound('introGo' + introSoundsSuffix), 0.6);
 				}
 				case 4:
 			}

@@ -11,6 +11,8 @@ typedef SwagWeek =
 	var characters:Array<String>;
 	var name:String;
 	var locked:Bool;
+	var background:String;
+	var backgroundColor:String;
 	var unlockAfter:String;
 	var hiddenUntilUnlocked:Bool;
 }

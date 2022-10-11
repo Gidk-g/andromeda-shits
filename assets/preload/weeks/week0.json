@@ -12,5 +12,7 @@
 	"name": "",
 	"locked": false,
 	"unlockAfter": "",
+	"background": "",
+	"backgroundColor": "0xFFF9CF51",
 	"hiddenUntilUnlocked": false
 }

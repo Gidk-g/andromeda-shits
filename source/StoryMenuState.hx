@@ -7,6 +7,7 @@ import flixel.group.FlxGroup;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
+import flixel.tweens.FlxEase;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 
@@ -16,6 +17,10 @@ import Discord.DiscordClient;
 
 class StoryMenuState extends MusicBeatState
 {
+    var bgYellow:FlxSprite;
+	var bgSprite:FlxSprite;
+	var colorTween:FlxTween;
+
 	public static var weekCompleted:Map<String, Bool> = [];
 	public static var loadedWeeks:Array<SwagWeek> = [];
 	public static var loadedWeekList:Array<String> = [];
@@ -117,7 +122,13 @@ class StoryMenuState extends MusicBeatState
 		rightArrow.animation.play('idle');
 		difficultySelectors.add(rightArrow);
 
-		add(new FlxSprite(0, 56).makeGraphic(FlxG.width, 400, 0xFFF9CF51));
+		bgYellow = new FlxSprite(0, 56).makeGraphic(FlxG.width, 386, FlxColor.WHITE, true);
+		bgYellow.color = 0xFFF9CF51;
+		bgSprite = new FlxSprite(0, 56);
+		bgSprite.antialiasing = true;
+
+		add(bgYellow);
+		add(bgSprite);
 
 		grpWeekCharacters = new FlxTypedGroup<StoryCharacter>();
 		add(grpWeekCharacters);
@@ -147,6 +158,13 @@ class StoryMenuState extends MusicBeatState
 		#end
 
 		super.create();
+
+		var co = 0xFFF9CF51;
+		if (daWeek.backgroundColor != null) {
+			var c = FlxColor.fromString(daWeek.backgroundColor);
+			if (c != null) co = c;
+		}
+		bgYellow.color = co;
 	}
 
 	override function update(elapsed:Float)
@@ -170,11 +188,22 @@ class StoryMenuState extends MusicBeatState
 			if (!selectedWeek)
 			{
 				if (controls.UP_P)
+				{
 					changeWeek(-1);
-				else if (controls.DOWN_P)
+				    FlxG.sound.play(Paths.sound('scrollMenu'));
+				}
+
+				if (controls.DOWN_P)
+				{
 					changeWeek(1);
-				else if (FlxG.mouse.wheel != 0)
+				    FlxG.sound.play(Paths.sound('scrollMenu'));
+				}
+			
+				if (FlxG.mouse.wheel != 0)
+				{
 					changeWeek(-FlxG.mouse.wheel);
+				    FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+				}
 
 				if (controls.RIGHT)
 					rightArrow.animation.play('press')
@@ -308,7 +337,15 @@ class StoryMenuState extends MusicBeatState
 			bullShit++;
 		}
 
-		FlxG.sound.play(Paths.sound('scrollMenu'));
+		bgSprite.visible = true;
+		var leWeek:SwagWeek = loadedWeeks[curWeek];
+		var assetName:String = leWeek.background;
+		if(assetName == null || assetName.length < 1) {
+			bgSprite.visible = false;
+		} else {
+			bgSprite.loadGraphic(Paths.image('menubackgrounds/' + assetName));
+		}
+
 		updateText();
 	}
 
@@ -325,6 +362,14 @@ class StoryMenuState extends MusicBeatState
 		final daWeek:SwagWeek = loadedWeeks[curWeek];
 		for (i in 0...grpWeekCharacters.length)
 			grpWeekCharacters.members[i].changeCharacter(daWeek.characters[i]);
+
+		if (colorTween != null) colorTween.cancel();
+		var co = 0xFFF9CF51;
+		if (daWeek.backgroundColor != null) {
+			var c = FlxColor.fromString(daWeek.backgroundColor);
+			if (c != null) co = c;
+		}
+		colorTween = FlxTween.color(bgYellow, 0.25, bgYellow.color, co, {ease : FlxEase.smoothStepInOut});
 
 		txtTracklist.text = "Tracks\n";
 
