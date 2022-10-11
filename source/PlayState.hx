@@ -825,8 +825,6 @@ class PlayState extends MusicBeatState
 						stage_script.start();
 
 						scripts.push(stage_script);
-
-                        luaModchartExists = FileSystem.exists(Paths.luaStage('${SONG.stage}'));
 					} else {
 						if(SONG.noBG!=true){
 		                defaultCamZoom = 1;
@@ -1603,8 +1601,6 @@ class PlayState extends MusicBeatState
 						cutscene.start();
 
 						scripts.push(cutscene);
-
-                        luaModchartExists = FileSystem.exists(Paths.luaCutscenes(SONG.song.toLowerCase()));
 					} else
 						startCountdown();
 			}
