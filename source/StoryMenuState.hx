@@ -235,7 +235,9 @@ class StoryMenuState extends MusicBeatState
 		super.update(elapsed);
 
 		for (i in 0...grpWeekCharacters.length)
-			if (grpWeekCharacters.members[i].animation.curAnim != null && grpWeekCharacters.members[i].animation.curAnim.finished && grpWeekCharacters.members[i].animation.curAnim.name != 'hey')
+			if (grpWeekCharacters.members[i].animation.curAnim != null
+				&& grpWeekCharacters.members[i].animation.curAnim.finished
+				&& grpWeekCharacters.members[i].animation.curAnim.name != 'hey')
 				grpWeekCharacters.members[i].dance();
 	}
 
@@ -361,7 +363,8 @@ class StoryMenuState extends MusicBeatState
 	{
 		final daWeek:SwagWeek = loadedWeeks[curWeek];
 		for (i in 0...grpWeekCharacters.length)
-			grpWeekCharacters.members[i].changeCharacter(daWeek.characters[i]);
+			if (grpWeekCharacters.members[i].curCharacter != daWeek.characters[i])
+				grpWeekCharacters.members[i].changeCharacter(daWeek.characters[i]);
 
 		if (colorTween != null) colorTween.cancel();
 		var co = 0xFFF9CF51;

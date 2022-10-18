@@ -15,6 +15,7 @@ class StoryCharacter extends FlxSprite
 {
 	public var animOffsets:Map<String, Array<Dynamic>> = [];
 	public var danceAnimation:Array<String> = ['idle'];
+	public var curCharacter:String = 'bf';
 
 	public function new(x:Float, y:Float, name:String = 'bf')
 	{
@@ -23,11 +24,11 @@ class StoryCharacter extends FlxSprite
 		changeCharacter(name);
 	}
 
-	public function changeCharacter(char:String = 'bf'):Void
+	public function changeCharacter(curCharacter:String = 'bf'):Void
 	{
-		animOffsets.clear();
+		this.curCharacter = curCharacter;
 
-		if (char == '')
+		if (curCharacter == '')
 		{
 			if (visible == true)
 				visible = false;
@@ -40,18 +41,20 @@ class StoryCharacter extends FlxSprite
 			scale.set(1, 1);
 			updateHitbox(); // is this acually needed?
 
-			final daCharacter:SwagStoryCharacter = StoryCharacterParse.loadJson(char + '/data');
+			final daCharacter:SwagStoryCharacter = StoryCharacterParse.loadJson(curCharacter + '/data');
 
-			if (FileSystem.exists(Paths.xxml('menucharacters/' + char + '/spritesheet')))
-				frames = FlxAtlasFrames.fromSparrow(Paths.image('menucharacters/' + char + '/spritesheet'),
-					Paths.xxml('menucharacters/' + char + '/spritesheet'));
-			else if (FileSystem.exists(Paths.ttxt('menucharacters/' + char + '/spritesheet')))
-				frames = FlxAtlasFrames.fromSpriteSheetPacker(Paths.image('menucharacters/' + char + '/spritesheet'),
-					Paths.ttxt('menucharacters/' + char + '/spritesheet'));
-			else if (FileSystem.exists(Paths.jjson('menucharacters/' + char + '/spritesheet')))
-				frames = FlxAtlasFrames.fromTexturePackerJson(Paths.image('menucharacters/' + char + '/spritesheet'),
-					Paths.jjson('menucharacters/' + char + '/spritesheet'));
+			if (FileSystem.exists(Paths.xxml('menucharacters/' + curCharacter + '/spritesheet')))
+				frames = FlxAtlasFrames.fromSparrow(Paths.image('menucharacters/' + curCharacter + '/spritesheet'),
+					Paths.xxml('menucharacters/' + curCharacter + '/spritesheet'));
+			else if (FileSystem.exists(Paths.ttxt('menucharacters/' + curCharacter + '/spritesheet')))
+				frames = FlxAtlasFrames.fromSpriteSheetPacker(Paths.image('menucharacters/' + curCharacter + '/spritesheet'),
+					Paths.ttxt('menucharacters/' + curCharacter + '/spritesheet'));
+			else if (FileSystem.exists(Paths.jjson('menucharacters/' + curCharacter + '/spritesheet')))
+				frames = FlxAtlasFrames.fromTexturePackerJson(Paths.image('menucharacters/' + curCharacter + '/spritesheet'),
+					Paths.jjson('menucharacters/' + curCharacter + '/spritesheet'));
 	
+			animOffsets.clear();
+
 			if (daCharacter.animations != null && daCharacter.animations.length > 0)
 			{
 				for (anim in daCharacter.animations)
@@ -79,10 +82,10 @@ class StoryCharacter extends FlxSprite
 			else
 				animation.addByPrefix(danceAnimation[0], 'idle', 24, false);
 
-			if (daCharacter.danceAnimation != null)
-				danceAnimation = daCharacter.danceAnimation;
-			else if (daCharacter.danceAnimation != null && daCharacter.danceAnimation.length >= 2)
+            if (daCharacter.danceAnimation != null && daCharacter.danceAnimation.length >= 3)
 				Lib.application.window.alert("The Character $char can't use more then 2 animations for the default animations", "StoryCharacter Error!");
+			else if (daCharacter.danceAnimation != null)
+				danceAnimation = daCharacter.danceAnimation;
 
 			if (daCharacter.scale != 1)
 			{

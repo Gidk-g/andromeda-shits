@@ -79,7 +79,6 @@ class HScriptHandler
         interp.variables.set("FileSystem", FileSystem);
         interp.variables.set("BGSprite", BGSprite);
         interp.variables.set("FlxG", flixel.FlxG);
-        interp.variables.set("Polymod", polymod.Polymod);
         interp.variables.set("Assets", openfl.utils.Assets);
         interp.variables.set("LimeAssets", lime.utils.Assets);
         interp.variables.set("FlxSprite", flixel.FlxSprite);

@@ -201,14 +201,6 @@ class Paths
 		return getPath('data/$song/modchart.lua',TEXT,library);
 	}
 
-	inline static public function luaStage(key:String,?library:String){
-		return getPath('stages/$key.lua',TEXT,library);
-	}
-
-	inline static public function luaCutscenes(key:String,?library:String){
-		return getPath('cutscenes/$key.lua',TEXT,library);
-	}
-
 	inline static public function image(key:String, ?library:String):Any
 	{
 		

@@ -411,7 +411,7 @@ var UI_songTitle:FlxUIInputText;
 
         sliderRate = new FlxUISlider(this, 'playbackSpeed', 130, 210, 0.5, 3, 150, null, 5, FlxColor.WHITE, FlxColor.BLACK);
 
-        tab_group_marker.add(sliderRate);
+        //tab_group_marker.add(sliderRate);
 		tab_group_marker.add(markerScrollMult);
 		tab_group_marker.add(markerSnap);
 		UI_box.addGroup(tab_group_marker);
@@ -878,8 +878,8 @@ var UI_noteTex:FlxUIInputText;
 		if (playbackSpeed >= 3)
 			playbackSpeed = 3;
 
-		FlxG.sound.music.pitch = playbackSpeed;
-		vocals.pitch = playbackSpeed;
+		//FlxG.sound.music.pitch = playbackSpeed;
+		//vocals.pitch = playbackSpeed;
 
 		bpmTxt.text = bpmTxt.text = Std.string(FlxMath.roundDecimal(Conductor.songPosition / 1000, 2))
 			+ " / "
