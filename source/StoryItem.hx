@@ -14,6 +14,7 @@ class StoryItem extends FlxSprite
 		super(x, y);
 
 		loadGraphic(Paths.image('storymenu/' + name));
+		TitleState.curDir = "assets";
 		antialiasing = true;
 	}
 

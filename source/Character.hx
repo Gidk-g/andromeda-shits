@@ -10,6 +10,7 @@ import openfl.Assets;
 import sys.FileSystem;
 import sys.io.File;
 import animateatlas.AtlasFrameMaker;
+
 using StringTools;
 
 class Character extends FlxSprite

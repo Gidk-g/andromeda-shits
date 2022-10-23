@@ -40,6 +40,7 @@ class StoryCharacter extends FlxSprite
 
 			scale.set(1, 1);
 			updateHitbox(); // is this acually needed?
+			TitleState.curDir = "assets";
 
 			final daCharacter:SwagStoryCharacter = StoryCharacterParse.loadJson(curCharacter + '/data');
 

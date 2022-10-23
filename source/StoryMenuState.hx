@@ -41,6 +41,7 @@ class StoryMenuState extends MusicBeatState
 	override function create()
 	{
 		Week.loadJsons(true);
+		TitleState.curDir = "assets";
 
 		#if desktop
 		// Updating Discord Rich Presence
