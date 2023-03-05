@@ -3024,6 +3024,7 @@ class PlayState extends MusicBeatState
 								spr.animation.play('confirm', true);
 							}
 						});
+
 						if (SONG.song != 'Tutorial')
 							camZooming = true;
 
@@ -3140,8 +3141,7 @@ class PlayState extends MusicBeatState
 				spr.animation.play('static',true);
 				spr.centerOffsets();
 			}
-
-				spr.centerOrigin();
+			spr.centerOrigin();
 			if (spr.animation.curAnim.name == 'confirm' && !curStage.startsWith('school'))
 			{
 				spr.centerOffsets();
@@ -3808,20 +3808,21 @@ class PlayState extends MusicBeatState
 		}
 
 
-		playerStrums.forEach(function(spr:FlxSprite)
-		{
-				spr.centerOrigin();
-			if(controlArray[spr.ID] && spr.animation.curAnim.name!="confirm")
-				spr.animation.play("pressed");
+		playerStrums.forEach(function(spr:FlxSprite) {
+			if (controlArray[spr.ID] && spr.animation.curAnim.name != 'confirm')
+				spr.animation.play('pressed');
+			if (!holdArray[spr.ID])
+				spr.animation.play('static');
 
-			if(!holdArray[spr.ID]){
-				spr.animation.play("static");
-			}
-			if (spr.animation.curAnim.name == 'confirm' && !curStage.startsWith('school'))
-			{
-				spr.centerOffsets();
-			}
-			else
+			if (!curStage.startsWith('school')) {
+				spr.centerOrigin();
+
+				spr.offset.x = spr.frameWidth / 2;
+				spr.offset.y = spr.frameHeight / 2;
+
+				spr.offset.x -= 156 * spr.scale.x / 2;
+				spr.offset.y -= 156 * spr.scale.y / 2;
+			} else
 				spr.centerOffsets();
 		});
 
@@ -3920,23 +3921,23 @@ class PlayState extends MusicBeatState
 			}
 
 
-			playerStrums.forEach(function(spr:FlxSprite)
-			{
-				if(controlArray[spr.ID] && spr.animation.curAnim.name!="confirm")
-					spr.animation.play("pressed");
+		playerStrums.forEach(function(spr:FlxSprite) {
+			if (controlArray[spr.ID] && spr.animation.curAnim.name != 'confirm')
+				spr.animation.play('pressed');
+			if (!holdArray[spr.ID])
+				spr.animation.play('static');
 
-				if(!holdArray[spr.ID]){
-					spr.animation.play("static");
-				}
-				if (spr.animation.curAnim.name == 'confirm' && !curStage.startsWith('school'))
-				{
-					spr.centerOffsets();
-					spr.offset.x -= 13;
-					spr.offset.y -= 13;
-				}
-				else
-					spr.centerOffsets();
-			});
+			if (!curStage.startsWith('school')) {
+				spr.centerOrigin();
+
+				spr.offset.x = spr.frameWidth / 2;
+				spr.offset.y = spr.frameHeight / 2;
+
+				spr.offset.x -= 156 * spr.scale.x / 2;
+				spr.offset.y -= 156 * spr.scale.y / 2;
+			} else
+				spr.centerOffsets();
+		});
 	}
 
 	function noteMiss(direction:Int = 1):Void
@@ -4023,10 +4024,9 @@ class PlayState extends MusicBeatState
 					goodNoteHit(note);
 			}
 			note.wasGoodHit=true;
-			playerStrums.forEach(function(spr:FlxSprite)
-			{
-				if (Math.abs(note.noteData) == spr.ID)
-				{
+
+			playerStrums.forEach(function(spr:FlxSprite) {
+				if (Math.abs(note.noteData) == spr.ID) {
 					spr.animation.play('confirm', true);
 				}
 			});
