@@ -38,6 +38,7 @@ class CoolUtil
 		if(!color.startsWith('0x')) color = '0xff' + color;
 		return Std.parseInt(color);
 	}
+
 	public static function cameraFromString(cam:String):FlxCamera {
 		trace(cam);
 		switch(cam.toLowerCase()) {
@@ -67,6 +68,32 @@ class CoolUtil
 		return NORMAL;
 	}
 
+	public static function dominantColor(sprite:flixel.FlxSprite):Int{
+		var countByColor:Map<Int, Int> = [];
+		for(col in 0...sprite.frameWidth){
+			for(row in 0...sprite.frameHeight){
+			    var colorOfThisPixel:Int = sprite.pixels.getPixel32(col, row);
+			    if(colorOfThisPixel != 0){
+				    if(countByColor.exists(colorOfThisPixel)){
+				        countByColor[colorOfThisPixel] =  countByColor[colorOfThisPixel] + 1;
+				    }else if(countByColor[colorOfThisPixel] != 13520687 - (2*13520687)){
+					    countByColor[colorOfThisPixel] = 1;
+				    }
+			    }
+			}
+	    }
+		var maxCount = 0;
+		var maxKey:Int = 0;//after the loop this will store the max color
+		countByColor[flixel.util.FlxColor.BLACK] = 0;
+			for(key in countByColor.keys()){
+			if(countByColor[key] >= maxCount){
+				maxCount = countByColor[key];
+				maxKey = key;
+			}
+		}
+		return maxKey;
+	}
+
 	public static function addSprite(x,y,path:String,scrollFactor:Float=1):FlxSprite{
 		var sprite:FlxSprite = new FlxSprite(x, y).loadGraphic(Paths.image(path));
 		sprite.scrollFactor.set(scrollFactor, scrollFactor);
@@ -74,6 +101,7 @@ class CoolUtil
 		sprite.antialiasing = true;
 		return sprite;
 	}
+
 	public static function addAnimPrefix(x,y,path:String,prefix:String,scrollFactor:Float=1,loop:Bool=true,fps:Int=24):FlxSprite{
 		var sprite:FlxSprite = new FlxSprite(x, y);
 		sprite.frames = Paths.getSparrowAtlas(path);
@@ -83,6 +111,7 @@ class CoolUtil
 		sprite.scrollFactor.set(scrollFactor, scrollFactor);
 		return sprite;
 	}
+
 	public static function addAnimIndices(x,y,path:String,prefix:String,indices:Array<Int>,scrollFactor:Float=1,loop:Bool=true,fps:Int=24):FlxSprite{
 		var sprite:FlxSprite = new FlxSprite(x, y);
 		sprite.frames = Paths.getSparrowAtlas(path);
