@@ -31,6 +31,7 @@ class HScriptHandler
         parser.allowJSON = true;
         parser.allowTypes = true;
         parser.allowMetadata = true;
+
 		TitleState.curDir = "assets";
 
         setDefaultVariables();
