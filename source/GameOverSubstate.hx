@@ -19,15 +19,20 @@ class GameOverSubstate extends MusicBeatSubstate
 	{
 		var daStage = PlayState.curStage;
 		var daBf:String = '';
+
 		daBf = boyf;
-this.deathSong = deathSong;
+        this.deathSong = deathSong;
+
 		super();
+
 		var bg:FlxSprite = new FlxSprite(0, 0).makeGraphic(1280, 720, CoolUtil.getColorFromHex(color));
 		add(bg);
+
 		bg.scrollFactor.set();
 		bg.scale.set(FlxG.camera.zoom,FlxG.camera.zoom);
+
 		Conductor.songPosition = 0;
-		
+
 		bf = new Boyfriend(x, y, daBf);
 		add(bf);
 
