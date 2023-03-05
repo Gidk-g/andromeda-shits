@@ -1071,8 +1071,6 @@ class PlayState extends MusicBeatState
 		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this,
 			'health', 0, 2);
 		healthBar.scrollFactor.set();
-		var p1Color = 0xFF66FF33;
-		var p2Color = 0xFFFF0000; // TODO: GIVE EVERYONE CUSTOM HP BAR COLOURS!!!
 		// AND MAKE IT BETTER WITH A NOTEPAD FILE OR SOMETHING!!
 
 		var showTime:Bool = (currentOptions.timeBarType != 3);
@@ -1117,6 +1115,9 @@ class PlayState extends MusicBeatState
 			timeTxt.size = 24;
 			timeTxt.y += 3;
 		}
+
+		var p1Color = 0xFF66FF33;
+		var p2Color = 0xFFFF0000;
 
 		switch(SONG.player1){
 			case 'bf':

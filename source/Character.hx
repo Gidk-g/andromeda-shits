@@ -2,6 +2,7 @@ package;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.util.FlxColor;
 import flixel.animation.FlxBaseAnimation;
 import flixel.graphics.FlxGraphic;
 import flixel.graphics.frames.FlxAtlasFrames;
@@ -15,10 +16,11 @@ using StringTools;
 
 class Character extends FlxSprite
 {
+	public static var instance:MusicBeatState;
+
 	public var animOffsets:Map<String, Array<Dynamic>>;
 	public var unintAnims:Array<String> = [];
 	public var debugMode:Bool = false;
-	public static var instance:MusicBeatState;
 	public var isPlayer:Bool = false;
 	public var curCharacter:String = 'bf';
 	public var holding:Bool=false;
@@ -26,9 +28,12 @@ class Character extends FlxSprite
 	public var curAnim:String = "";
 	public var holdTimer:Float = 0;
 	public var camOffset:Array<Int> = [0,0];
+	public var barColor:FlxColor = FlxColor.WHITE;
 	public var script:HScriptHandler;
 	public var danceSpeed:Int = 1;
+
 	public static var charsBitmaps:Map<String,FlxGraphic> = new Map<String,FlxGraphic>();
+
 	public function new(x:Float, y:Float, ?character:String = "bf", ?isPlayer:Bool = false)
 	{
 		super(x, y);
@@ -507,13 +512,6 @@ class Character extends FlxSprite
 
 			FlxG.bitmap.dumpCache();
 
-		    if(FileSystem.exists(Paths.hx("characters/" + curCharacter)))
-		    {
-			    script = new HScriptHandler(Paths.hx("characters/" + curCharacter));
-			    script.interp.variables.set("character", this);
-			    script.callFunction("createCharacter", [curCharacter, isPlayer]);
-		    }
-
 			loadAnimations();
 			loadOffsets();
 
@@ -523,6 +521,12 @@ class Character extends FlxSprite
 				playAnim("danceRight");
 		}
 
+		if(FileSystem.exists(Paths.hx("characters/" + curCharacter)))
+		{
+			script = new HScriptHandler(Paths.hx("characters/" + curCharacter));
+			script.interp.variables.set("character", this);
+			script.callFunction("createCharacter", [curCharacter, isPlayer]);
+		}
 
 		dance();
 
@@ -635,6 +639,7 @@ class Character extends FlxSprite
 				Cache.animData[curCharacter] = data;
 			}
 			for(s in anims){
+				var colorIdk:Array<Int> = [];
 				var stuff:Array<String> = s.split(" ");
 				var type = stuff.splice(0,1)[0];
 				var name = stuff.splice(0,1)[0];
@@ -644,6 +649,8 @@ class Character extends FlxSprite
 					flipX = !flipX;
 				}else if(type.toLowerCase()=='pixel'){
 					antialiasing = false;
+				}else if (type.toLowerCase() == 'color'){
+					barColor = FlxColor.fromRGB(colorIdk[0], colorIdk[1], colorIdk[2]);
 				}else if (type.toLowerCase() == 'scale'){
 					origin.set();
 					scale.set(Std.parseFloat(name),Std.parseFloat(name));
