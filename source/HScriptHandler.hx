@@ -24,15 +24,13 @@ class HScriptHandler
 
     public function new(hscript_path: String)
     {
-        // load text
+		TitleState.curDir = "assets";
+
         program = parser.parseString(File.getContent(hscript_path));
 
-        // parser settings
         parser.allowJSON = true;
         parser.allowTypes = true;
         parser.allowMetadata = true;
-
-		TitleState.curDir = "assets";
 
         setDefaultVariables();
 
@@ -74,9 +72,6 @@ class HScriptHandler
 
     public function setDefaultVariables()
     {
-        // global class shit
-
-        // haxeflixel classes
         interp.variables.set("File", File);
         interp.variables.set("FileSystem", FileSystem);
         interp.variables.set("BGSprite", BGSprite);
@@ -115,7 +110,6 @@ class HScriptHandler
                 trace(class_name + " isn't a valid class or enum!");
         });
 
-        // game classes
         interp.variables.set("PlayState", PlayState);
         interp.variables.set("Conductor", Conductor);
         interp.variables.set("Paths", Paths);
@@ -123,7 +117,6 @@ class HScriptHandler
         interp.variables.set("Note", Note);
         interp.variables.set("Song", Song);
 
-        // function shits
         interp.variables.set("trace", function(value:Dynamic) {
             trace(value);
         });
@@ -148,7 +141,6 @@ class HScriptHandler
         interp.variables.set("otherScripts", other_scripts);
         interp.variables.set("currentOptions", PlayState.instance.currentOptions);
 
-        // playstate local shit
         interp.variables.set("bf", PlayState.instance.boyfriend);
         interp.variables.set("gf", PlayState.instance.gf);
         interp.variables.set("dad", PlayState.instance.dad);
