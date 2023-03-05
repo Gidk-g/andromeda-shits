@@ -3808,21 +3808,20 @@ class PlayState extends MusicBeatState
 		}
 
 
-		playerStrums.forEach(function(spr:FlxSprite) {
+		playerStrums.forEach(function(spr:FlxSprite)
+	    {
 			if (controlArray[spr.ID] && spr.animation.curAnim.name != 'confirm')
 				spr.animation.play('pressed');
 			if (!holdArray[spr.ID])
 				spr.animation.play('static');
 
-			if (!curStage.startsWith('school')) {
-				spr.centerOrigin();
+			spr.centerOrigin();
 
-				spr.offset.x = spr.frameWidth / 2;
-				spr.offset.y = spr.frameHeight / 2;
-
-				spr.offset.x -= 156 * spr.scale.x / 2;
-				spr.offset.y -= 156 * spr.scale.y / 2;
-			} else
+			if (spr.animation.curAnim.name == 'confirm' && !curStage.startsWith('school'))
+			{
+				spr.centerOffsets();
+			}
+			else
 				spr.centerOffsets();
 		});
 
@@ -3921,21 +3920,20 @@ class PlayState extends MusicBeatState
 			}
 
 
-		playerStrums.forEach(function(spr:FlxSprite) {
+		playerStrums.forEach(function(spr:FlxSprite) 
+		{
 			if (controlArray[spr.ID] && spr.animation.curAnim.name != 'confirm')
 				spr.animation.play('pressed');
 			if (!holdArray[spr.ID])
 				spr.animation.play('static');
 
-			if (!curStage.startsWith('school')) {
-				spr.centerOrigin();
+			spr.centerOrigin();
 
-				spr.offset.x = spr.frameWidth / 2;
-				spr.offset.y = spr.frameHeight / 2;
-
-				spr.offset.x -= 156 * spr.scale.x / 2;
-				spr.offset.y -= 156 * spr.scale.y / 2;
-			} else
+			if (spr.animation.curAnim.name == 'confirm' && !curStage.startsWith('school'))
+			{
+				spr.centerOffsets();
+			}
+			else
 				spr.centerOffsets();
 		});
 	}
@@ -4025,8 +4023,10 @@ class PlayState extends MusicBeatState
 			}
 			note.wasGoodHit=true;
 
-			playerStrums.forEach(function(spr:FlxSprite) {
-				if (Math.abs(note.noteData) == spr.ID) {
+			playerStrums.forEach(function(spr:FlxSprite)
+			{
+				if (Math.abs(note.noteData) == spr.ID)
+				{
 					spr.animation.play('confirm', true);
 				}
 			});
