@@ -272,7 +272,7 @@ class PlayState extends MusicBeatState
 
 	public var introSoundsSuffix:String = '';
 
-	private var timeBarBG:AttachedSprite;
+	public var timeBarBG:AttachedSprite;
 	public var timeBar:FlxBar;
 
 	public var botplaySine:Float = 0;
