@@ -1,6 +1,7 @@
 package;
 
 import Options;
+import cpp.CPPInterface;
 import flixel.FlxGame;
 import flixel.FlxState;
 import openfl.Assets;
@@ -78,6 +79,15 @@ class Main extends Sprite
 		addChild(fpsVar);
 		Lib.current.stage.align = "tl";
 		Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
+		#end
+
+		#if cpp
+		CPPInterface.darkMode();
+		#end
+
+		#if cpp
+		cpp.NativeGc.enable(true);
+		cpp.NativeGc.run(true);
 		#end
 	}
 
