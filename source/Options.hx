@@ -264,7 +264,7 @@ class Checkbox extends FlxSprite
 					offset.y=0;
 				case 'selected':
 					offset.x=10;
-					offset.y=49.7;
+					offset.y=50;
 			}
 		}
 
