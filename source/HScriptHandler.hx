@@ -24,8 +24,6 @@ class HScriptHandler
 
     public function new(hscript_path: String)
     {
-		TitleState.curDir = "assets";
-
         program = parser.parseString(File.getContent(hscript_path));
 
         parser.allowJSON = true;

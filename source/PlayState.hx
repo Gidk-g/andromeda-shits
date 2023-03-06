@@ -818,15 +818,7 @@ class PlayState extends MusicBeatState
 		          }
 		          default:
 		          {
-					if (FileSystem.exists(Paths.hx('stages/${SONG.stage}'))) {
-						curStage = SONG.stage;
-
-						stage_script = new HScriptHandler(Paths.hx('stages/${SONG.stage}'));
-						stage_script.start();
-
-						scripts.push(stage_script);
-					} else {
-						if(SONG.noBG!=true){
+					if(SONG.noBG!=true){
 		                defaultCamZoom = 1;
 		                curStage = 'stage';
 
@@ -849,12 +841,11 @@ class PlayState extends MusicBeatState
 						stageCurtains.active = false;
 
 						add(stageCurtains);
-						}else{
-							curStage='custom';
-						}
+					}else{
+						curStage='custom';
 					}
-		          }
-              }
+		        }
+            }
 
 		allScriptCall("createStage");
 
@@ -965,10 +956,13 @@ class PlayState extends MusicBeatState
 		if (boyfriend.script != null)
 			scripts.push(boyfriend.script);
 
-		if (FileSystem.exists(Paths.hx("data/" + SONG.song.toLowerCase() + "/script"))) {
-			script = new HScriptHandler(Paths.hx("data/" + SONG.song.toLowerCase() + "/script"));
+		if (FileSystem.exists(TitleState.curDir + "/data/" + SONG.song.toLowerCase() + "/script.hx")){
+			script = new HScriptHandler(TitleState.curDir + "/data/" + SONG.song.toLowerCase() + "/script.hx");
 			script.start();
-
+			scripts.push(script);
+		}else{
+			script = new HScriptHandler("assets/data/" + SONG.song.toLowerCase() + "/script.hx");
+			script.start();
 			scripts.push(script);
 		}
 
@@ -1580,13 +1574,7 @@ class PlayState extends MusicBeatState
 				case 'thorns':
 					schoolIntro(doof);
 				default:
-					if (FileSystem.exists(Paths.hx("cutscenes/" + SONG.song.toLowerCase()))) {
-						var cutscene = new HScriptHandler(Paths.hx("cutscenes/" + SONG.song.toLowerCase()));
-						cutscene.start();
-
-						scripts.push(cutscene);
-					} else
-						startCountdown();
+					startCountdown();
 			}
 		}
 		else
