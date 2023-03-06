@@ -108,11 +108,6 @@ class Paths
 		return getPath('images/$key.xml', TEXT, library);
 	}
 
-	inline static public function hx(key:String, ?library:String)
-	{
-		return getPath('$key.hx', TEXT, library);
-	}
-
 	inline static public function json(key:String, ?library:String)
 	{
 		

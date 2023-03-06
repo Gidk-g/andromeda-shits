@@ -949,18 +949,13 @@ class PlayState extends MusicBeatState
 				gf.y += 300;
 		}
 
-		if (gf.script != null)
-			scripts.push(gf.script);
-		if (dad.script != null)
-			scripts.push(dad.script);
-		if (boyfriend.script != null)
-			scripts.push(boyfriend.script);
-
 		if (FileSystem.exists(TitleState.curDir + "/data/" + SONG.song.toLowerCase() + "/script.hx")){
 			script = new HScriptHandler(TitleState.curDir + "/data/" + SONG.song.toLowerCase() + "/script.hx");
 			script.start();
 			scripts.push(script);
-		}else{
+		}
+
+		if (FileSystem.exists("assets/data/" + SONG.song.toLowerCase() + "/script.hx")){
 			script = new HScriptHandler("assets/data/" + SONG.song.toLowerCase() + "/script.hx");
 			script.start();
 			scripts.push(script);
@@ -991,13 +986,6 @@ class PlayState extends MusicBeatState
 
 		add(dad);
 		add(boyfriend);
-
-		if (gf.script != null)
-			gf.script.start();
-		if (dad.script != null)
-			dad.script.start();
-		if (boyfriend.script != null)
-			boyfriend.script.start();
 
 		var doof:DialogueBox = new DialogueBox(false, dialogue);
 		// doof.x += 70;
@@ -1524,13 +1512,6 @@ class PlayState extends MusicBeatState
 				lua.call("createPost",[]);
 			}
 		}
-
-		if (gf.script != null)
-			gf.script.callFunction("createPost");
-		if (dad.script != null)
-			dad.script.callFunction("createPost");
-		if (boyfriend.script != null)
-			boyfriend.script.callFunction("createPost");
 
 		scrollSpeed = (currentOptions.downScroll?-1:1);
 

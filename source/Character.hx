@@ -29,7 +29,6 @@ class Character extends FlxSprite
 	public var holdTimer:Float = 0;
 	public var camOffset:Array<Int> = [0,0];
 	public var barColor:FlxColor = FlxColor.WHITE;
-	public var script:HScriptHandler;
 	public var danceSpeed:Int = 1;
 
 	public static var charsBitmaps:Map<String,FlxGraphic> = new Map<String,FlxGraphic>();
@@ -536,14 +535,6 @@ class Character extends FlxSprite
 				playAnim("danceRight");
 		}
 
-		if (FileSystem.exists(TitleState.curDir + "/shared/images/characters/" + curCharacter + "Script.hx")){
-			script = new HScriptHandler(TitleState.curDir + "/shared/images/characters/"+curCharacter+"Script.hx");
-		}else{
-			script = new HScriptHandler("assets/shared/images/characters/"+curCharacter+".hx");
-		}
-		script.interp.variables.set("character", this);
-		script.callFunction("createCharacter", [curCharacter, isPlayer]);
-
 		dance();
 
 		if (isPlayer)
@@ -695,9 +686,6 @@ class Character extends FlxSprite
 
 	override function update(elapsed:Float)
 	{
-		if(script != null)
-			script.update(elapsed);
-
 		if(holding)
 			animation.curAnim.curFrame=0;
 
