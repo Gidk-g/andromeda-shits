@@ -119,6 +119,7 @@ class HScriptHandler
             trace(value);
         });
 
+        /* WIP
         interp.variables.set("loadScript", function(script_path:String) {
             var new_script = new HScriptHandler(script_path);
             new_script.start();
@@ -135,6 +136,7 @@ class HScriptHandler
             if(other_scripts.length - 1 >= script_index)
                 other_scripts.remove(other_scripts[script_index]);
         });
+        */
 
         interp.variables.set("otherScripts", other_scripts);
         interp.variables.set("currentOptions", PlayState.instance.currentOptions);

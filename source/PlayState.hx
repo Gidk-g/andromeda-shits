@@ -4385,8 +4385,6 @@ class PlayState extends MusicBeatState
 		{
 			lightningStrikeShit();
 		}
-
-		allScriptCall("beatHitPost", [curBeat]);
 	}
 
 	function getGroupStuff(leArray:Dynamic, variable:String) {
