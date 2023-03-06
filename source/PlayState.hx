@@ -1102,7 +1102,7 @@ class PlayState extends MusicBeatState
 		timeBar = new FlxBar(timeBarBG.x + 4, timeBarBG.y + 4, LEFT_TO_RIGHT, Std.int(timeBarBG.width - 8), Std.int(timeBarBG.height - 8), this,
 			'songPercent', 0, 1);
 		timeBar.scrollFactor.set();
-		timeBar.createFilledBar(0xFF000000, 0xFFFFFFFF);
+		timeBar.createFilledBar(0xFF000000,dad.barColor);
 		timeBar.numDivisions = 800; //How much lag this causes?? Should i tone it down to idk, 400 or 200?
 		timeBar.alpha = 0;
 		timeBar.visible = showTime;
@@ -1116,26 +1116,9 @@ class PlayState extends MusicBeatState
 			timeTxt.y += 3;
 		}
 
-		var p1Color = 0xFF66FF33;
-		var p2Color = 0xFFFF0000;
-
-		switch(SONG.player1){
-			case 'bf':
-			    p1Color = 0xFF66FF33;
-			default:
-				p1Color = 0xFF66FF33;
-		}
-
-		switch(SONG.player2){
-			case 'bf':
-			    p2Color=0xFFFF0000;
-			default:
-				p2Color=0xFFFF0000;
-		}
-
 		cameraShits(true,true);
 
-		healthBar.createFilledBar(p2Color,p1Color);
+		healthBar.createFilledBar(dad.barColor,boyfriend.barColor);
 		// healthBar
 		add(healthBar);
 

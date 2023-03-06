@@ -65,6 +65,7 @@ class Character extends FlxSprite
 
 				loadOffsets();
 				playAnim('danceRight');
+				barColor = FlxColor.fromRGB(165,0,77);
 			case 'lizzy':
 				// GIRLFRIEND CODE
 				tex = Paths.getSparrowAtlas('characters/cutie','shared');
@@ -99,7 +100,7 @@ class Character extends FlxSprite
 
 				loadOffsets();
 				playAnim('danceRight');
-
+				barColor = FlxColor.fromRGB(165,0,77);
 			case 'gf-car':
 				tex = Paths.getSparrowAtlas('characters/gfCar','shared');
 				frames = tex;
@@ -110,7 +111,7 @@ class Character extends FlxSprite
 
 				loadOffsets();
 				playAnim('danceRight');
-
+				barColor = FlxColor.fromRGB(165,0,77);
 			case 'gf-pixel':
 				tex = Paths.getSparrowAtlas('characters/gfPixel','shared');
 				frames = tex;
@@ -124,7 +125,7 @@ class Character extends FlxSprite
 				setGraphicSize(Std.int(width * PlayState.daPixelZoom));
 				updateHitbox();
 				antialiasing = false;
-
+				barColor = FlxColor.fromRGB(165,0,77);
 			case 'dad':
 				// DAD ANIMATION LOADING CODE
 				tex = Paths.getSparrowAtlas('characters/DADDY_DEAREST','shared');
@@ -135,6 +136,8 @@ class Character extends FlxSprite
 				loadOffsets();
 
 				playAnim('idle');
+
+				barColor = FlxColor.fromRGB(175,102,206);
 			case 'spooky':
 				tex = Paths.getSparrowAtlas('characters/spooky_kids_assets','shared');
 				frames = tex;
@@ -148,6 +151,8 @@ class Character extends FlxSprite
 				loadOffsets();
 
 				playAnim('danceRight');
+
+				barColor = FlxColor.fromRGB(213,126,0);
 			case 'mom':
 				tex = Paths.getSparrowAtlas('characters/Mom_Assets','shared');
 				frames = tex;
@@ -164,6 +169,7 @@ class Character extends FlxSprite
 
 				playAnim('idle');
 
+				barColor = FlxColor.fromRGB(216,85,142);
 			case 'mom-car':
 				tex = Paths.getSparrowAtlas('characters/momCar','shared');
 				frames = tex;
@@ -179,6 +185,8 @@ class Character extends FlxSprite
 				loadOffsets();
 
 				playAnim('idle');
+
+				barColor = FlxColor.fromRGB(216,85,142);
 			case 'monster':
 				tex = Paths.getSparrowAtlas('characters/Monster_Assets','shared');
 				frames = tex;
@@ -190,6 +198,7 @@ class Character extends FlxSprite
 
 				loadOffsets();
 				playAnim('idle');
+				barColor = FlxColor.fromRGB(243,255,110);
 			case 'monster-christmas':
 				tex = Paths.getSparrowAtlas('characters/monsterChristmas','shared');
 				frames = tex;
@@ -198,9 +207,10 @@ class Character extends FlxSprite
 				animation.addByPrefix('singDOWN', 'monster down', 24, false);
 				animation.addByPrefix('singLEFT', 'Monster left note', 24, false);
 				animation.addByPrefix('singRIGHT', 'Monster Right note', 24, false);
-				loadOffsets();
 
+				loadOffsets();
 				playAnim('idle');
+				barColor = FlxColor.fromRGB(243,255,110);
 			case 'pico':
 				tex = Paths.getSparrowAtlas('characters/Pico_FNF_assetss','shared');
 				frames = tex;
@@ -230,7 +240,7 @@ class Character extends FlxSprite
 				playAnim('idle');
 
 				flipX = true;
-
+				barColor = FlxColor.fromRGB(183,216,85);
 			case 'bf':
 				var tex = Paths.getSparrowAtlas('characters/BOYFRIEND','shared');
 				frames = tex;
@@ -255,7 +265,7 @@ class Character extends FlxSprite
 				playAnim('idle');
 
 				flipX = true;
-
+				barColor = FlxColor.fromRGB(49,176,209);
 				case 'bf-neb':
 					var tex = Paths.getSparrowAtlas('characters/nebBF','shared');
 					frames = tex;
@@ -299,6 +309,7 @@ class Character extends FlxSprite
 				playAnim('idle');
 
 				flipX = true;
+				barColor = FlxColor.fromRGB(49,176,209);
 			case 'bf-car':
 				var tex = Paths.getSparrowAtlas('characters/bfCar','shared');
 				frames = tex;
@@ -316,6 +327,7 @@ class Character extends FlxSprite
 				playAnim('idle');
 
 				flipX = true;
+				barColor = FlxColor.fromRGB(49,176,209);
 			case 'bf-pixel':
 				frames = Paths.getSparrowAtlas('characters/bfPixel','shared');
 				animation.addByPrefix('idle', 'BF IDLE', 24, false);
@@ -339,6 +351,7 @@ class Character extends FlxSprite
 				antialiasing = false;
 
 				flipX = true;
+				barColor = FlxColor.fromRGB(123,214,246);
 			case 'bf-pixel-dead':
 				frames = Paths.getSparrowAtlas('characters/bfPixelsDEAD','shared');
 				animation.addByPrefix('singUP', "BF Dies pixel", 24, false);
@@ -354,7 +367,7 @@ class Character extends FlxSprite
 				updateHitbox();
 				antialiasing = false;
 				flipX = true;
-
+				barColor = FlxColor.fromRGB(123,214,246);
 			case 'senpai':
 				frames = Paths.getSparrowAtlas('characters/senpai','shared');
 				animation.addByPrefix('idle', 'Senpai Idle', 24, false);
@@ -370,6 +383,7 @@ class Character extends FlxSprite
 				updateHitbox();
 
 				antialiasing = false;
+				barColor = FlxColor.fromRGB(255,170,111);
 			case 'senpai-angry':
 				frames = Paths.getSparrowAtlas('characters/senpai','shared');
 				animation.addByPrefix('idle', 'Angry Senpai Idle', 24, false);
@@ -385,7 +399,7 @@ class Character extends FlxSprite
 				updateHitbox();
 
 				antialiasing = false;
-
+				barColor = FlxColor.fromRGB(255,170,111);
 			case 'spirit':
 				frames = Paths.getPackerAtlas('characters/spirit','shared');
 				animation.addByPrefix('idle', "idle spirit_", 24, false);
@@ -401,7 +415,7 @@ class Character extends FlxSprite
 				playAnim('idle');
 
 				antialiasing = false;
-
+				barColor = FlxColor.fromRGB(255,60,110);
 			case 'parents-christmas':
 				frames = Paths.getSparrowAtlas('characters/mom_dad_christmas_assets');
 				animation.addByPrefix('idle', 'Parent Christmas Idle', 24, false);
@@ -419,6 +433,7 @@ class Character extends FlxSprite
 				loadOffsets();
 
 				playAnim('idle');
+				barColor = FlxColor.fromRGB(196,94,174);
 			case 'kapi':
 				frames = Paths.getSparrowAtlas('characters/kapi');
 				animation.addByPrefix('idle', 'Dad idle dance', 24, false);
@@ -639,7 +654,6 @@ class Character extends FlxSprite
 				Cache.animData[curCharacter] = data;
 			}
 			for(s in anims){
-				var colorIdk:Array<Int> = [];
 				var stuff:Array<String> = s.split(" ");
 				var type = stuff.splice(0,1)[0];
 				var name = stuff.splice(0,1)[0];
@@ -650,7 +664,8 @@ class Character extends FlxSprite
 				}else if(type.toLowerCase()=='pixel'){
 					antialiasing = false;
 				}else if (type.toLowerCase() == 'color'){
-					barColor = FlxColor.fromRGB(colorIdk[0], colorIdk[1], colorIdk[2]);
+					var c = name.split(',');
+					barColor = FlxColor.fromRGB(Std.parseInt(c[0]), Std.parseInt(c[1]), Std.parseInt(c[2]));
 				}else if (type.toLowerCase() == 'scale'){
 					origin.set();
 					scale.set(Std.parseFloat(name),Std.parseFloat(name));
