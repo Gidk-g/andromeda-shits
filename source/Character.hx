@@ -536,8 +536,8 @@ class Character extends FlxSprite
 				playAnim("danceRight");
 		}
 
-		if (FileSystem.exists(TitleState.curDir + "/shared/images/characters/" + curCharacter + ".hx")){
-			script = new HScriptHandler(TitleState.curDir + "/shared/images/characters/"+curCharacter+".hx");
+		if (FileSystem.exists(TitleState.curDir + "/shared/images/characters/" + curCharacter + "Script.hx")){
+			script = new HScriptHandler(TitleState.curDir + "/shared/images/characters/"+curCharacter+"Script.hx");
 		}else{
 			script = new HScriptHandler("assets/shared/images/characters/"+curCharacter+".hx");
 		}
