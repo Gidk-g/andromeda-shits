@@ -381,8 +381,6 @@ class PlayState extends MusicBeatState
 		Conductor.mapBPMChanges(SONG);
 		Conductor.changeBPM(SONG.bpm);
 
-		var stage_script:HScriptHandler = null;
-
 		switch (SONG.song.toLowerCase())
 		{
 			case 'tutorial':
@@ -955,26 +953,16 @@ class PlayState extends MusicBeatState
 			scripts.push(script);
 		}
 
-		if (FileSystem.exists("assets/data/" + SONG.song.toLowerCase() + "/script.hx")){
-			script = new HScriptHandler("assets/data/" + SONG.song.toLowerCase() + "/script.hx");
-			script.start();
-			scripts.push(script);
-		}
-
-		if (stage_script != null) {
-			stage_script.interp.variables.set("bf", boyfriend);
-			stage_script.interp.variables.set("gf", gf);
-			stage_script.interp.variables.set("dad", dad);
-		}
-
 		if(boyfriend.curCharacter=='spirit'){
 			var evilTrail = new FlxTrail(boyfriend, null, 4, 24, 0.3, 0.069);
 			add(evilTrail);
 		}
+
 		if(dad.curCharacter=='spirit'){
 			var evilTrail = new FlxTrail(dad, null, 4, 24, 0.3, 0.069);
 			add(evilTrail);
 		}
+
 		if(SONG.player1=='bf-neb')
 			boyfriend.y -= 75;
 
