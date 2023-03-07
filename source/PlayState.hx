@@ -267,7 +267,7 @@ class PlayState extends MusicBeatState
 	public var sicks:Float = 0;
 	public var goods:Float = 0;
 	public var bads:Float = 0;
-	vpublic ar shits:Float = 0;
+	public var shits:Float = 0;
 
 	var luaModchartExists = false;
 
