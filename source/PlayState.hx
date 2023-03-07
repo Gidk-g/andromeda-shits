@@ -1194,6 +1194,7 @@ class PlayState extends MusicBeatState
 		startingSong = true;
 		if(luaModchartExists && currentOptions.loadModcharts){
 			lua = new LuaVM();
+
 			lua.setGlobalVar("curBeat",0);
 			lua.setGlobalVar("curStep",0);
 			lua.setGlobalVar("songPosition",Conductor.songPosition);
@@ -1203,6 +1204,9 @@ class PlayState extends MusicBeatState
 			lua.setGlobalVar("Y","Y");
 			lua.setGlobalVar("version",SONG.version);
 			lua.setGlobalVar("GameVersion",1.2);
+
+		    lua.setGlobalVar('isStoryMode', isStoryMode);
+		    lua.setGlobalVar('difficulty', storyDifficulty);
 
 			Lua_helper.add_callback(lua.state,"skipCountdown", function(){
 				skipCountdown = true;
@@ -1251,6 +1255,24 @@ class PlayState extends MusicBeatState
 			Lua_helper.add_callback(lua.state, "changeBPM", function(bpm:Int){
 				Conductor.changeBPM(bpm);
 			});
+		Lua_helper.add_callback(lua.state, "setHealthBarColors", function(leftHex:String, rightHex:String) {
+			var left:FlxColor = Std.parseInt(leftHex);
+			if(!leftHex.startsWith('0x')) left = Std.parseInt('0xff' + leftHex);
+			var right:FlxColor = Std.parseInt(rightHex);
+			if(!rightHex.startsWith('0x')) right = Std.parseInt('0xff' + rightHex);
+
+			healthBar.createFilledBar(left, right);
+			healthBar.updateBar();
+		});
+		Lua_helper.add_callback(lua.state, "setTimeBarColors", function(leftHex:String, rightHex:String) {
+			var left:FlxColor = Std.parseInt(leftHex);
+			if(!leftHex.startsWith('0x')) left = Std.parseInt('0xff' + leftHex);
+			var right:FlxColor = Std.parseInt(rightHex);
+			if(!rightHex.startsWith('0x')) right = Std.parseInt('0xff' + rightHex);
+
+		    timeBar.createFilledBar(right, left);
+			timeBar.updateBar();
+		});
 		Lua_helper.add_callback(lua.state, "getVar", function(variable:String) {
 			var killMe:Array<String> = variable.split('.');
 			if(killMe.length > 1) {
@@ -1344,10 +1366,23 @@ class PlayState extends MusicBeatState
 				beatCam(z1,z2);
 			});
 
-			
-			
-			
-			
+		Lua_helper.add_callback(lua.state, "startVideo", function(videoFile:String) {
+			#if VIDEOS_ALLOWED
+			if(FileSystem.exists(Paths.video(videoFile))) {
+				startVideo(videoFile);
+				return true;
+			}
+			return false;
+			#else
+			if(PlayState.instance.endingSong) {
+				PlayState.instance.endSong();
+			} else {
+				PlayState.instance.startCountdown();
+			}
+			return true;
+			#end
+		});
+
 		Lua_helper.add_callback(lua.state, "getClassVar", function(classVar:String, variable:String) {
 			var killMe:Array<String> = variable.split('.');
 			if(killMe.length > 1) {
@@ -1787,11 +1822,8 @@ class PlayState extends MusicBeatState
 		inCutscene = true;
 
 		var filepath:String = Paths.video(name);
-		#if sys
+
 		if(!FileSystem.exists(filepath))
-		#else
-		if(!OpenFlAssets.exists(filepath))
-		#end
 		{
 			FlxG.log.warn('Couldnt find video file: ' + name);
 			startAndEnd();
