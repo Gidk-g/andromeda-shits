@@ -1256,6 +1256,11 @@ class PlayState extends MusicBeatState
 			Lua_helper.add_callback(lua.state, "changeBPM", function(bpm:Int){
 				Conductor.changeBPM(bpm);
 			});
+			Lua_helper.add_callback(lua.state, "removeStage", function(){
+                remove(bg);
+                remove(stageFront);
+                remove(stageCurtains);
+			});
 		Lua_helper.add_callback(lua.state, "setHealthBarColors", function(leftHex:String, rightHex:String) {
 			var left:FlxColor = Std.parseInt(leftHex);
 			if(!leftHex.startsWith('0x')) left = Std.parseInt('0xff' + leftHex);
