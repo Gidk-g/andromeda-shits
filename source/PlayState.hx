@@ -162,7 +162,7 @@ class PlayState extends MusicBeatState
 
 	public static var instance:PlayState;
 
-	var scoreTxtTween:FlxTween;
+	public var scoreTxtTween:FlxTween;
 
 	public var playerNoteOffsets:Array<Array<Float>> = [
 		[0,0], // left
@@ -247,27 +247,28 @@ class PlayState extends MusicBeatState
 
 	var songPercent:Float = 0;
 
-	var talking:Bool = true;
-	var songScore:Int = 0;
-	var scoreTxt:FlxText;
-	var shitsTxt:FlxText;
-	var badsTxt:FlxText;
-	var goodsTxt:FlxText;
-	var sicksTxt:FlxText;
-	var highComboTxt:FlxText;
-	var presetTxt:FlxText;
-	var missesTxt:FlxText;
+	public var talking:Bool = true;
+	public var songScore:Int = 0;
+	public var scoreTxt:FlxText;
+	public var shitsTxt:FlxText;
+	public var badsTxt:FlxText;
+	public var goodsTxt:FlxText;
+	public var sicksTxt:FlxText;
+	public var highComboTxt:FlxText;
+	public var presetTxt:FlxText;
+	public var missesTxt:FlxText;
 
-	var accuracy:Float = 1;
-	var hitNotes:Float = 0;
-	var totalNotes:Float = 0;
+	public var accuracy:Float = 1;
+	public var hitNotes:Float = 0;
+	public var totalNotes:Float = 0;
 
-	var grade:String = ScoreUtils.gradeArray[0];
-	var misses:Float = 0;
-	var sicks:Float = 0;
-	var goods:Float = 0;
-	var bads:Float = 0;
-	var shits:Float = 0;
+	public var grade:String = ScoreUtils.gradeArray[0];
+	public var misses:Float = 0;
+	public var sicks:Float = 0;
+	public var goods:Float = 0;
+	public var bads:Float = 0;
+	vpublic ar shits:Float = 0;
+
 	var luaModchartExists = false;
 
 	public var introSoundsSuffix:String = '';
