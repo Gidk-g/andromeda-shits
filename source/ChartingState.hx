@@ -67,14 +67,6 @@ class ChartingState extends MusicBeatState
 
 	var mSpeed = 1.0;
 
-	var playbackSpeed(default, set):Float = 1;
-
-	function set_playbackSpeed(value:Float)
-	{
-		playbackSpeed = value;
-		return playbackSpeed;
-	}
-
 	var dummyArrow:FlxSprite;
 	var useHitSounds = false;
 	var curRenderedNotes:FlxTypedGroup<Note>;
@@ -392,7 +384,6 @@ var UI_songTitle:FlxUIInputText;
 
 		UI_box.addGroup(tab_group_section);
 	}
-    var sliderRate:FlxUISlider;
 	var markerScrollMult:FlxUINumericStepper;
 	var markerSnap:FlxUICheckBox;
 	function addMarkerUI():Void
@@ -407,9 +398,6 @@ var UI_songTitle:FlxUIInputText;
 		markerSnap = new FlxUICheckBox(10, 35, null, null, "Snap to mouse", 100);
 		markerSnap.checked = false;
 
-        sliderRate = new FlxUISlider(this, 'playbackSpeed', 130, 210, 0.5, 3, 150, null, 5, FlxColor.WHITE, FlxColor.BLACK);
-
-        //tab_group_marker.add(sliderRate);
 		tab_group_marker.add(markerScrollMult);
 		tab_group_marker.add(markerSnap);
 		UI_box.addGroup(tab_group_marker);
@@ -519,15 +507,6 @@ var UI_noteTex:FlxUIInputText;
 					_song.notes[curSection].altAnim = check.checked;
 			}
 		}
-		else if (id == FlxUISlider.CHANGE_EVENT && (sender is FlxUISlider))
-		{
-			switch (sender)
-			{
-				case 'playbackSpeed':
-					set_playbackSpeed(Std.int(sliderRate.value));
-				default:
-			}
-		}
 		else if (id == FlxUINumericStepper.CHANGE_EVENT && (sender is FlxUINumericStepper))
 		{
 			var nums:FlxUINumericStepper = cast sender;
@@ -566,7 +545,6 @@ var UI_noteTex:FlxUIInputText;
 			else if (wname == 'marker_scrollVel')
 			{
 				mSpeed = curSelectedMarker.multiplier = nums.value;
-				
 				updateGrid();
 			}
 		}
@@ -855,29 +833,6 @@ var UI_noteTex:FlxUIInputText;
 			changeSection(curSection + shiftThing);
 		if (FlxG.keys.justPressed.LEFT || FlxG.keys.justPressed.A)
 			changeSection(curSection - shiftThing);
-
-		// PLAYBACK SPEED CONTROLS //
-		var holdingShift = FlxG.keys.pressed.SHIFT;
-		var holdingLB = FlxG.keys.pressed.LBRACKET;
-		var holdingRB = FlxG.keys.pressed.RBRACKET;
-		var pressedLB = FlxG.keys.justPressed.LBRACKET;
-		var pressedRB = FlxG.keys.justPressed.RBRACKET;
-
-		if (!holdingShift && pressedLB || holdingShift && holdingLB)
-			playbackSpeed -= 0.01;
-		if (!holdingShift && pressedRB || holdingShift && holdingRB)
-			playbackSpeed += 0.01;
-		if (FlxG.keys.pressed.ALT && (pressedLB || pressedRB || holdingLB || holdingRB))
-			playbackSpeed = 1;
-		//
-
-		if (playbackSpeed <= 0.5)
-			playbackSpeed = 0.5;
-		if (playbackSpeed >= 3)
-			playbackSpeed = 3;
-
-		//FlxG.sound.music.pitch = playbackSpeed;
-		//vocals.pitch = playbackSpeed;
 
 		bpmTxt.text = bpmTxt.text = Std.string(FlxMath.roundDecimal(Conductor.songPosition / 1000, 2))
 			+ " / "
