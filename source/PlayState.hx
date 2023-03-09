@@ -684,6 +684,11 @@ class PlayState extends MusicBeatState
 
 		                  // defaultCamZoom = 0.9;
 
+				          deathSound = 'fnf_loss_sfx-pixel';
+				          deathSong = 'gameOver-pixel';
+				          deathEndSong = 'gameOverEnd-pixel';
+				          boyf = 'bf-pixel-dead';
+
 		                  var bgSky = new FlxSprite().loadGraphic(Paths.image('weeb/weebSky'));
 		                  bgSky.scrollFactor.set(0.1, 0.1);
 		                  add(bgSky);
@@ -756,6 +761,11 @@ class PlayState extends MusicBeatState
 													modchart.addHudEffect(vcrDistortionHUD);
 												}
 											}
+
+				          deathSound = 'fnf_loss_sfx-pixel';
+				          deathSong = 'gameOver-pixel';
+				          deathEndSong = 'gameOverEnd-pixel';
+				          boyf = 'bf-pixel-dead';
 
 		                  var waveEffectBG = new FlxWaveEffect(FlxWaveMode.ALL, 2, -1, 3, 2);
 		                  var waveEffectFG = new FlxWaveEffect(FlxWaveMode.ALL, 2, -1, 5, 2);
