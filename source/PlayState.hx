@@ -879,9 +879,6 @@ class PlayState extends MusicBeatState
 		if (curStage == 'limo')
 			gfVersion = 'gf-car';
 
-		if(SONG.player1=='bf-neb')
-			gfVersion = 'lizzy';
-
 		gf = new Character(400, 130, gfVersion);
 		gf.scrollFactor.set(0.95, 0.95);
 
@@ -973,9 +970,6 @@ class PlayState extends MusicBeatState
 			var evilTrail = new FlxTrail(dad, null, 4, 24, 0.3, 0.069);
 			add(evilTrail);
 		}
-
-		if(SONG.player1=='bf-neb')
-			boyfriend.y -= 75;
 
 		add(gf);
 
