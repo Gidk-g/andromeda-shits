@@ -1271,6 +1271,156 @@ class PlayState extends MusicBeatState
                 remove(stageFront);
                 remove(stageCurtains);
 			});
+		Lua_helper.add_callback(lua.state, "mouseClicked", function(button:String) {
+			var boobs = FlxG.mouse.justPressed;
+			switch(button){
+				case 'middle':
+					boobs = FlxG.mouse.justPressedMiddle;
+				case 'right':
+					boobs = FlxG.mouse.justPressedRight;
+			}
+			return boobs;
+		});
+		Lua_helper.add_callback(lua.state, "mousePressed", function(button:String) {
+			var boobs = FlxG.mouse.pressed;
+			switch(button){
+				case 'middle':
+					boobs = FlxG.mouse.pressedMiddle;
+				case 'right':
+					boobs = FlxG.mouse.pressedRight;
+			}
+			return boobs;
+		});
+		Lua_helper.add_callback(lua.state, "mouseReleased", function(button:String) {
+			var boobs = FlxG.mouse.justReleased;
+			switch(button){
+				case 'middle':
+					boobs = FlxG.mouse.justReleasedMiddle;
+				case 'right':
+					boobs = FlxG.mouse.justReleasedRight;
+			}
+			return boobs;
+		});
+		Lua_helper.add_callback(lua.state, "keyboardJustPressed", function(name:String)
+		{
+			return Reflect.getProperty(FlxG.keys.justPressed, name);
+		});
+		Lua_helper.add_callback(lua.state, "keyboardPressed", function(name:String)
+		{
+			return Reflect.getProperty(FlxG.keys.pressed, name);
+		});
+		Lua_helper.add_callback(lua.state, "keyboardReleased", function(name:String)
+		{
+			return Reflect.getProperty(FlxG.keys.justReleased, name);
+		});
+		Lua_helper.add_callback(lua.state, "anyGamepadJustPressed", function(name:String)
+		{
+			return FlxG.gamepads.anyJustPressed(name);
+		});
+		Lua_helper.add_callback(lua.state, "anyGamepadPressed", function(name:String)
+		{
+			return FlxG.gamepads.anyPressed(name);
+		});
+		Lua_helper.add_callback(lua.state, "anyGamepadReleased", function(name:String)
+		{
+			return FlxG.gamepads.anyJustReleased(name);
+		});
+		Lua_helper.add_callback(lua.state, "gamepadAnalogX", function(id:Int, ?leftStick:Bool = true)
+		{
+			var controller = FlxG.gamepads.getByID(id);
+			if (controller == null)
+			{
+				return 0.0;
+			}
+			return controller.getXAxis(leftStick ? LEFT_ANALOG_STICK : RIGHT_ANALOG_STICK);
+		});
+		Lua_helper.add_callback(lua.state, "gamepadAnalogY", function(id:Int, ?leftStick:Bool = true)
+		{
+			var controller = FlxG.gamepads.getByID(id);
+			if (controller == null)
+			{
+				return 0.0;
+			}
+			return controller.getYAxis(leftStick ? LEFT_ANALOG_STICK : RIGHT_ANALOG_STICK);
+		});
+		Lua_helper.add_callback(lua.state, "gamepadJustPressed", function(id:Int, name:String)
+		{
+			var controller = FlxG.gamepads.getByID(id);
+			if (controller == null)
+			{
+				return false;
+			}
+			return Reflect.getProperty(controller.justPressed, name) == true;
+		});
+		Lua_helper.add_callback(lua.state, "gamepadPressed", function(id:Int, name:String)
+		{
+			var controller = FlxG.gamepads.getByID(id);
+			if (controller == null)
+			{
+				return false;
+			}
+			return Reflect.getProperty(controller.pressed, name) == true;
+		});
+		Lua_helper.add_callback(lua.state, "gamepadReleased", function(id:Int, name:String)
+		{
+			var controller = FlxG.gamepads.getByID(id);
+			if (controller == null)
+			{
+				return false;
+			}
+			return Reflect.getProperty(controller.justReleased, name) == true;
+		});
+
+		Lua_helper.add_callback(lua.state, "keyJustPressed", function(name:String) {
+			var key:Bool = false;
+			switch(name) {
+				case 'left': key = controls.LEFT;
+				case 'down': key = controls.DOWN;
+				case 'up': key = controls.UP;
+				case 'right': key = controls.RIGHT;
+				case 'leftP': key = controls.LEFT_P;
+				case 'downP': key = controls.DOWN_P;
+				case 'upP': key = controls.UP_P;
+				case 'rightP': key = controls.RIGHT_P;
+				case 'back': key = controls.BACK;
+				case 'enter': key = FlxG.keys.justPressed.ENTER;
+				case 'reset': key = controls.RESET;
+				case 'space': key = FlxG.keys.justPressed.SPACE;
+			}
+			return key;
+		});
+		Lua_helper.add_callback(lua.state, "keyPressed", function(name:String) {
+			var key:Bool = false;
+			switch(name) {
+				case 'left': key = controls.LEFT;
+				case 'down': key = controls.DOWN;
+				case 'up': key = controls.UP;
+				case 'right': key = controls.RIGHT;
+				case 'leftP': key = controls.LEFT_P;
+				case 'downP': key = controls.DOWN_P;
+				case 'upP': key = controls.UP_P;
+				case 'rightP': key = controls.RIGHT_P;
+				case 'enter': key = FlxG.keys.justPressed.ENTER;
+				case 'space': key = FlxG.keys.pressed.SPACE;
+			}
+			return key;
+		});
+		Lua_helper.add_callback(lua.state, "keyReleased", function(name:String) {
+			var key:Bool = false;
+			switch(name) {
+				case 'left': key = controls.LEFT;
+				case 'down': key = controls.DOWN;
+				case 'up': key = controls.UP;
+				case 'right': key = controls.RIGHT;
+				case 'leftP': key = controls.LEFT_P;
+				case 'downP': key = controls.DOWN_P;
+				case 'upP': key = controls.UP_P;
+				case 'rightP': key = controls.RIGHT_P;
+				case 'enter': key = FlxG.keys.justPressed.ENTER;
+				case 'space': key = FlxG.keys.justReleased.SPACE;
+			}
+			return key;
+		});
 		Lua_helper.add_callback(lua.state, "setHealthBarColors", function(leftHex:String, rightHex:String) {
 			var left:FlxColor = Std.parseInt(leftHex);
 			if(!leftHex.startsWith('0x')) left = Std.parseInt('0xff' + leftHex);
