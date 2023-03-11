@@ -1265,6 +1265,18 @@ class PlayState extends MusicBeatState
                 remove(stageFront);
                 remove(stageCurtains);
 			});
+		Lua_helper.add_callback(lua.state, "setDefaultZoom", function(value:Dynamic)
+		{
+			defaultCamZoom = value;
+		});
+		Lua_helper.add_callback(lua.state, "setGF", function(value:Dynamic)
+		{
+			gfVersion = value;
+		});
+		Lua_helper.add_callback(lua.state, "curGF", function()
+		{
+			return gfVersion;
+		});
 		Lua_helper.add_callback(lua.state, "createTrail", function(char:Dynamic, graphic:Dynamic, length:Dynamic, delay:Dynamic, alpha:Dynamic, diff:Dynamic, ?addInGroup:Dynamic, ?group:Dynamic){
 			var trail = new FlxTrail(char, graphic, length, delay, alpha, diff);
 			if (addInGroup == true && group != null)
