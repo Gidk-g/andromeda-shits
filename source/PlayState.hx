@@ -307,6 +307,8 @@ class PlayState extends MusicBeatState
 	public var detailsText:String = "";
 	public var detailsPausedText:String = "";
 
+    public var gfVersion:String = 'gf';
+
 	override public function create()
 	{
 		Paths.imgCache.clear();
@@ -862,8 +864,6 @@ class PlayState extends MusicBeatState
 			introSoundsSuffix = '-pixel';
 		}
 
-		var gfVersion:String = 'gf';
-
 		switch (curStage)
 		{
 			case 'limo':
@@ -1265,6 +1265,13 @@ class PlayState extends MusicBeatState
                 remove(stageFront);
                 remove(stageCurtains);
 			});
+		Lua_helper.add_callback(lua.state, "createTrail", function(char:Dynamic, graphic:Dynamic, length:Dynamic, delay:Dynamic, alpha:Dynamic, diff:Dynamic, ?addInGroup:Dynamic, ?group:Dynamic){
+			var trail = new FlxTrail(char, graphic, length, delay, alpha, diff);
+			if (addInGroup == true && group != null)
+				group.add(trail);
+			else
+				add(trail);
+		});
 		Lua_helper.add_callback(lua.state, "mouseClicked", function(button:String) {
 			var boobs = FlxG.mouse.justPressed;
 			switch(button){
