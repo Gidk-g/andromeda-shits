@@ -1265,11 +1265,11 @@ class PlayState extends MusicBeatState
                 remove(stageFront);
                 remove(stageCurtains);
 			});
-		Lua_helper.add_callback(lua.state, "setDefaultZoom", function(value:Dynamic)
+		Lua_helper.add_callback(lua.state, "setDefaultZoom", function(value:String)
 		{
 			defaultCamZoom = value;
 		});
-		Lua_helper.add_callback(lua.state, "setGF", function(value:Dynamic)
+		Lua_helper.add_callback(lua.state, "setGF", function(value:String)
 		{
 			gfVersion = value;
 		});
@@ -1277,7 +1277,7 @@ class PlayState extends MusicBeatState
 		{
 			return gfVersion;
 		});
-		Lua_helper.add_callback(lua.state, "createTrail", function(char:Dynamic, graphic:Dynamic, length:Dynamic, delay:Dynamic, alpha:Dynamic, diff:Dynamic, ?addInGroup:Dynamic, ?group:Dynamic){
+		Lua_helper.add_callback(lua.state, "createTrail", function(char:String, graphic:String, length:Int, delay:Int, alpha:Int, diff:Bool, ?addInGroup:String, ?group:String){
 			var trail = new FlxTrail(char, graphic, length, delay, alpha, diff);
 			if (addInGroup == true && group != null)
 				group.add(trail);
