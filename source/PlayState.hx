@@ -1277,10 +1277,6 @@ class PlayState extends MusicBeatState
 		{
 			return gfVersion;
 		});
-		Lua_helper.add_callback(lua.state, "createTrail", function(char:Dynamic, graphic:Dynamic, length:Int, delay:Int, alpha:Float, diff:Float){
-			var trail = new FlxTrail(char, graphic, length, delay, alpha, diff);
-			add(trail);
-		});
 		Lua_helper.add_callback(lua.state, "mouseClicked", function(button:String) {
 			var boobs = FlxG.mouse.justPressed;
 			switch(button){
