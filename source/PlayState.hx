@@ -1265,7 +1265,7 @@ class PlayState extends MusicBeatState
                 remove(stageFront);
                 remove(stageCurtains);
 			});
-		Lua_helper.add_callback(lua.state, "setDefaultZoom", function(value:String)
+		Lua_helper.add_callback(lua.state, "setDefaultZoom", function(value:Float)
 		{
 			defaultCamZoom = value;
 		});
@@ -1277,12 +1277,9 @@ class PlayState extends MusicBeatState
 		{
 			return gfVersion;
 		});
-		Lua_helper.add_callback(lua.state, "createTrail", function(char:String, graphic:String, length:Int, delay:Int, alpha:Int, diff:Bool, ?addInGroup:String, ?group:String){
+		Lua_helper.add_callback(lua.state, "createTrail", function(char:Dynamic, graphic:Dynamic, length:Int, delay:Int, alpha:Float, diff:Float){
 			var trail = new FlxTrail(char, graphic, length, delay, alpha, diff);
-			if (addInGroup == true && group != null)
-				group.add(trail);
-			else
-				add(trail);
+			add(trail);
 		});
 		Lua_helper.add_callback(lua.state, "mouseClicked", function(button:String) {
 			var boobs = FlxG.mouse.justPressed;
