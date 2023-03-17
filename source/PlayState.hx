@@ -73,8 +73,6 @@ class PlayState extends MusicBeatState
 {
 	public static var currentPState:PlayState;
 
-	public static var STRUM_X = 42;
-
 	public static var curStage:String = '';
 	public static var SONG:SwagSong;
 	public static var isStoryMode:Bool = false;
@@ -1056,8 +1054,10 @@ class PlayState extends MusicBeatState
 		healthBar.scrollFactor.set();
 		// AND MAKE IT BETTER WITH A NOTEPAD FILE OR SOMETHING!!
 
+	    var SEX_X = 42;
+
 		var showTime:Bool = (currentOptions.timeBarType != 3);
-		timeTxt = new FlxText(STRUM_X + (FlxG.width / 2) - 248, 19, 400, "", 32);
+		timeTxt = new FlxText(SEX_X + (FlxG.width / 2) - 248, 19, 400, "", 32);
 		timeTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		timeTxt.scrollFactor.set();
 		timeTxt.alpha = 0;
