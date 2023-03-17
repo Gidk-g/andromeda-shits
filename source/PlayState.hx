@@ -3622,24 +3622,21 @@ class PlayState extends MusicBeatState
 		var rating:FlxSprite = new FlxSprite();
 		var score:Int = ScoreUtils.RatingToScore(daRating);
 
-		if(daRating=='shit')
+		if(daRating=='shit') {
 			shits++;
-		else if(daRating=='bad')
+			doSplash = false;
+		}
+		else if(daRating=='bad') {
 			bads++;
-		else if(daRating=='good')
+			doSplash = false;
+		}
+		else if(daRating=='good') {
 			goods++;
-		else
+			doSplash = false;
+		}
+		else {
 			sicks++;
-
-		switch(daRating){
-			case 'sick':
-			    doSplash = true;
-			case 'good':
-				doSplash = false;
-			case 'bad':
-			    doSplash = false;
-			case 'shit':
-			    doSplash = false;
+			// doSplash = true;
 		}
 
 		hitNotes+=ScoreUtils.RatingToHit(daRating);
