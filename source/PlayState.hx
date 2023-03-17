@@ -1265,6 +1265,18 @@ class PlayState extends MusicBeatState
                 remove(stageFront);
                 remove(stageCurtains);
 			});
+		Lua_helper.add_callback(lua.state, "stringStartsWith", function(str:String, start:String) {
+			return str.startsWith(start);
+		});
+		Lua_helper.add_callback(lua.state, "stringEndsWith", function(str:String, end:String) {
+			return str.endsWith(end);
+		});
+		Lua_helper.add_callback(lua.state, "stringSplit", function(str:String, split:String) {
+			return str.split(split);
+		});
+		Lua_helper.add_callback(lua.state, "stringTrim", function(str:String) {
+			return str.trim();
+		});
 		Lua_helper.add_callback(lua.state, "setDefaultZoom", function(value:Float)
 		{
 			defaultCamZoom = value;
@@ -1522,6 +1534,18 @@ class PlayState extends MusicBeatState
 				}
 				setGroupStuff(leArray, variable, value);
 			}
+		});
+		Lua_helper.add_callback(lua.state, "removeGroupVar", function(obj:String, index:Int, dontDestroy:Bool = false) {
+			if(Std.isOfType(Reflect.getProperty(PlayState.instance, obj), FlxTypedGroup)) {
+				var sex = Reflect.getProperty(PlayState.instance, obj).members[index];
+				if(!dontDestroy)
+					sex.kill();
+				Reflect.getProperty(PlayState.instance, obj).remove(sex, true);
+				if(!dontDestroy)
+					sex.destroy();
+				return;
+			}
+			Reflect.getProperty(PlayState.instance, obj).remove(Reflect.getProperty(PlayState.instance, obj)[index]);
 		});
 			Lua_helper.add_callback(lua.state,"setOption", function(variable:String,val:Any){
 				Reflect.setField(currentOptions,variable,val);
