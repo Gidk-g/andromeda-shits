@@ -131,10 +131,11 @@ class OptionUtils
 class Options
 {
 	public var controls:Array<FlxKey> = [FlxKey.A,FlxKey.S,FlxKey.K,FlxKey.L,FlxKey.R];
-	public var ghosttapping:Bool = false;
+	public var ghosttapping:Bool = true;
 	public var failForMissing:Bool = false;
 	public var loadModcharts:Bool = true;
 	public var pauseHoldAnims:Bool = true;
+	public var noteSplash:Bool = true;
 	public var newInput:Bool = true;
 
 	public var dummy:Bool = false;

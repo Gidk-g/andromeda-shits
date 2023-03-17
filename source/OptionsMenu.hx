@@ -35,6 +35,7 @@ class OptionsMenu extends MusicBeatState
 			//new ScrollOption("ratingWindow",0,OptionUtils.ratingWindowNames.length-1,OptionUtils.ratingWindowNames),
 			//new ScrollOption("timeBarType",0,OptionUtils.timeBarTypeNames.length-1,OptionUtils.timeBarTypeNames),
 			new ToggleOption("ghosttapping","Ghost Tapping"),
+			new ToggleOption("noteSplash","Note Splash"),
 			new ToggleOption("botPlay","BotPlay"),
 			new StateOption("Calibrate Offset",new SoundOffsetState()),
 		]),
