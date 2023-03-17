@@ -32,6 +32,7 @@ typedef SwagSong =
 	@:optional var initialSpeed:Float;
 	@:optional var noteskin:String;
 	@:optional var strumskin:String;
+	@:optional var splashskin:String;
 	@:optional var notescale:Float;
 	@:optional var version:Int;
 }
@@ -46,6 +47,7 @@ class Song
 	public var pixelStage:Bool = false;
 	public var noteskin:String = 'NOTE_assets';
 	public var strumskin:String = 'NOTE_assets';
+	public var splashskin:String = 'noteSplashes';
 	public var speed:Float = 1;
 	public var noteccale:Float = 0.7;
 	public var initialSpeed:Float = 1;
@@ -104,6 +106,7 @@ class Song
 		if (swagShit.noteskin == null) swagShit.noteskin = 'NOTE_assets';
 		if (swagShit.strumskin== null) swagShit.strumskin = 'NOTE_assets';
 		if (swagShit.notescale == null) swagShit.notescale = 0.7;
+		if (swagShit.splashskin== null) swagShit.splashskin = 'noteSplashes';
 		return swagShit;
 	}
 }

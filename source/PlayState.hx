@@ -123,6 +123,7 @@ class PlayState extends MusicBeatState
 	private var playerStrums:FlxTypedGroup<FlxSprite>;
 	private var dadStrums:FlxTypedGroup<FlxSprite>;
 	private var playerStrumLines:FlxTypedGroup<FlxSprite>;
+	public var grpNoteSplashes:FlxTypedGroup<NoteSplash>;
 	public var refNotes:FlxTypedGroup<FlxSprite>;
 	private var opponentStrumLines:FlxTypedGroup<FlxSprite>;
 	public var luaSprites:Map<String, Dynamic>;
@@ -369,6 +370,8 @@ class PlayState extends MusicBeatState
 		FlxG.cameras.add(camHUD);
 		FlxG.cameras.add(camOther);
 		FlxG.cameras.add(pauseHUD);
+
+		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
 
 		FlxCamera.defaultCameras = [camGame];
 
@@ -996,6 +999,11 @@ class PlayState extends MusicBeatState
 
 		strumLineNotes = new FlxTypedGroup<FlxSprite>();
 		add(strumLineNotes);
+		add(grpNoteSplashes);
+
+		var splash:NoteSplash = new NoteSplash(100, 100, 0);
+		grpNoteSplashes.add(splash);
+		splash.alpha = 0.0;
 
 		playerStrumLines = new FlxTypedGroup<FlxSprite>();
 		opponentStrumLines = new FlxTypedGroup<FlxSprite>();
@@ -1173,6 +1181,7 @@ class PlayState extends MusicBeatState
 		add(scoreTxt);
 
 		strumLineNotes.cameras = [camHUD];
+		grpNoteSplashes.cameras = [camHUD];
 		renderedNotes.cameras = [camHUD];
 		healthBar.cameras = [camHUD];
 		healthBarBG.cameras = [camHUD];
@@ -3590,12 +3599,15 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	private function popUpScore(noteDiff:Float):Void
+	private function popUpScore(noteDiff:Float, daNote:Note):Void
 	{
 		var daRating = ScoreUtils.DetermineRating(noteDiff);
+
 		if(ScoreUtils.botPlay){
 			daRating='sick';
 		}
+
+		var doSplash:Bool = true;
 
 		totalNotes++;
 		// boyfriend.playAnim('hey');
@@ -3619,10 +3631,25 @@ class PlayState extends MusicBeatState
 		else
 			sicks++;
 
+		switch(daRating){
+			case 'sick':
+			    doSplash = true;
+			case 'good':
+				doSplash = false;
+			case 'bad':
+			    doSplash = false;
+			case 'shit':
+			    doSplash = false;
+		}
+
 		hitNotes+=ScoreUtils.RatingToHit(daRating);
 		songScore += score;
 
-		allScriptCall("popUpScore", [daRating, noteDiff, combo, rating]);
+		if (doSplash) {
+			spawnNoteSplashOnNote(daNote);
+		}
+
+		allScriptCall("popUpScore", [daRating, noteDiff, daNote, combo, rating]);
 
 		var pixelShitPart1:String = "";
 		var pixelShitPart2:String = '';
@@ -4221,7 +4248,7 @@ class PlayState extends MusicBeatState
 		{
 			combo++;
 			var noteDiff:Float = Math.abs(Conductor.songPosition - note.strumTime);
-			popUpScore(noteDiff);
+			popUpScore(noteDiff, note);
 			if(combo>highestCombo)
 				highestCombo=combo;
 
@@ -4294,6 +4321,21 @@ class PlayState extends MusicBeatState
 		vocals.volume = 1;
 		updateAccuracy();
 
+	}
+
+	public function spawnNoteSplashOnNote(note:Note) {
+		if(note != null) {
+			var strum:FlxSprite = playerStrums.members[note.noteData];
+			if(strum != null) {
+				spawnNoteSplash(strum.x, strum.y, note.noteData, note);
+			}
+		}
+	}
+
+	public function spawnNoteSplash(x:Float, y:Float, data:Int, ?note:Note = null) {
+		var splash:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
+		splash.setupNoteSplash(x, y, data);
+		grpNoteSplashes.add(splash);
 	}
 
 	var fastCarCanDrive:Bool = true;

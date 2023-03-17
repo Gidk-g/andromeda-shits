@@ -213,6 +213,7 @@ class ChartingState extends MusicBeatState
 var UI_noteskin:FlxUIInputText;
 var UI_strumskin:FlxUIInputText;
 var UI_notescale:FlxUINumericStepper;
+var UI_splashskin:FlxUIInputText;
 var UI_songTitle:FlxUIInputText;
 	function addSongUI():Void
 	{
@@ -221,6 +222,7 @@ var UI_songTitle:FlxUIInputText;
 		 UI_noteskin = new FlxUIInputText(10, 130, 70, _song.noteskin, 8);
 		 UI_strumskin = new FlxUIInputText(10, 160, 70, _song.strumskin, 8);
 		 UI_notescale = new FlxUINumericStepper(110, 160, 0.1, _song.notescale,0.1,160,1);
+		 UI_splashskin = new FlxUIInputText(110, 130, 70, _song.splashskin, 8);
 
 		var check_voices = new FlxUICheckBox(10, 25, null, null, "Has voice track", 100);
 		check_voices.checked = _song.needsVoices;
@@ -302,6 +304,7 @@ var UI_songTitle:FlxUIInputText;
 		tab_group_song.add(UI_noteskin);
 		tab_group_song.add(UI_strumskin);
 		tab_group_song.add(UI_notescale);
+		tab_group_song.add(UI_splashskin);
 
 		tab_group_song.add(check_voices);
 		tab_group_song.add(check_mute_inst);
@@ -745,7 +748,7 @@ var UI_noteTex:FlxUIInputText;
 		}
 
 		var blockInput:Bool = false;
-		blockInput = (UI_songTitle.hasFocus || UI_noteskin.hasFocus || UI_strumskin.hasFocus || UI_noteTex.hasFocus);
+		blockInput = (UI_songTitle.hasFocus || UI_noteskin.hasFocus || UI_strumskin.hasFocus || UI_noteTex.hasFocus || UI_splashskin.hasFocus);
 		if (!blockInput)
 		{
 			if (FlxG.keys.justPressed.SPACE)
