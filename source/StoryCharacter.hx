@@ -14,8 +14,8 @@ import StoryCharacterData.SwagStoryCharacter;
 class StoryCharacter extends FlxSprite
 {
 	public var animOffsets:Map<String, Array<Dynamic>> = [];
-	public var danceAnimation:Array<String> = ['idle'];
 	public var curCharacter:String = 'bf';
+	public var danceIdle:Bool = false;
 
 	public function new(x:Float, y:Float, name:String = 'bf')
 	{
@@ -39,21 +39,22 @@ class StoryCharacter extends FlxSprite
 				visible = true;
 
 			scale.set(1, 1);
-			updateHitbox(); // is this acually needed?
+			updateHitbox();
+
 			TitleState.curDir = "assets";
 
-			final daCharacter:SwagStoryCharacter = StoryCharacterParse.loadJson(curCharacter + '/data');
+			final daCharacter:SwagStoryCharacter = StoryCharacterParse.loadJson(curCharacter);
 
-			if (FileSystem.exists(Paths.xxml('menucharacters/' + curCharacter + '/spritesheet')))
-				frames = FlxAtlasFrames.fromSparrow(Paths.image('menucharacters/' + curCharacter + '/spritesheet'),
-					Paths.xxml('menucharacters/' + curCharacter + '/spritesheet'));
-			else if (FileSystem.exists(Paths.ttxt('menucharacters/' + curCharacter + '/spritesheet')))
-				frames = FlxAtlasFrames.fromSpriteSheetPacker(Paths.image('menucharacters/' + curCharacter + '/spritesheet'),
-					Paths.ttxt('menucharacters/' + curCharacter + '/spritesheet'));
-			else if (FileSystem.exists(Paths.jjson('menucharacters/' + curCharacter + '/spritesheet')))
-				frames = FlxAtlasFrames.fromTexturePackerJson(Paths.image('menucharacters/' + curCharacter + '/spritesheet'),
-					Paths.jjson('menucharacters/' + curCharacter + '/spritesheet'));
-	
+			if (FileSystem.exists(Paths.xxml('menucharacters/' + curCharacter)))
+				frames = FlxAtlasFrames.fromSparrow(Paths.image('menucharacters/' + curCharacter),
+					Paths.xxml('menucharacters/' + curCharacter));
+			else if (FileSystem.exists(Paths.ttxt('menucharacters/' + curCharacter)))
+				frames = FlxAtlasFrames.fromSpriteSheetPacker(Paths.image('menucharacters/' + curCharacter),
+					Paths.ttxt('menucharacters/' + curCharacter));
+			else if (FileSystem.exists(Paths.jjson('menucharacters/' + curCharacter)))
+				frames = FlxAtlasFrames.fromTexturePackerJson(Paths.image('menucharacters/' + curCharacter),
+					Paths.jjson('menucharacters/' + curCharacter));
+
 			animOffsets.clear();
 
 			if (daCharacter.animations != null && daCharacter.animations.length > 0)
@@ -68,12 +69,12 @@ class StoryCharacter extends FlxSprite
 					final animOffset:Array<Float> = anim.offset;
 					final animFlipX:Bool = anim.flipX;
 					final animFlipY:Bool = anim.flipY;
-	
+
 					if (animIndices != null && animIndices.length > 0)
 						animation.addByIndices(animAnimation, animPrefix, animIndices, '', animFramerate, animLooped, animFlipX, animFlipY);
 					else
 						animation.addByPrefix(animAnimation, animPrefix, animFramerate, animLooped, animFlipX, animFlipY);
-	
+
 					if (animOffset != null && animOffset.length > 0)
 						addOffset(animAnimation, animOffset[0], animOffset[1]);
 					else
@@ -81,12 +82,7 @@ class StoryCharacter extends FlxSprite
 				}
 			}
 			else
-				animation.addByPrefix(danceAnimation[0], 'idle', 24, false);
-
-            if (daCharacter.danceAnimation != null && daCharacter.danceAnimation.length >= 3)
-				Lib.application.window.alert("The Character $char can't use more then 2 animations for the default animations", "StoryCharacter Error!");
-			else if (daCharacter.danceAnimation != null)
-				danceAnimation = daCharacter.danceAnimation;
+				animation.addByPrefix('idle', 'idle', 24, false);
 
 			if (daCharacter.scale != 1)
 			{
@@ -101,8 +97,10 @@ class StoryCharacter extends FlxSprite
 
 			flipX = daCharacter.flipX;
 			flipY = daCharacter.flipY;
-	
+
+			recalculateDanceIdle();
 			dance();
+
 			animation.finish();
 		}
 	}
@@ -111,18 +109,44 @@ class StoryCharacter extends FlxSprite
 
 	public function dance()
 	{
-		if ((danceAnimation[0] != null && animation.getByName(danceAnimation[0]) != null)
-			&& (danceAnimation[1] != null && animation.getByName(danceAnimation[1]) != null))
+		if (danceIdle)
 		{
 			danced = !danced;
 
 			if (danced)
-				playAnim(danceAnimation[0]);
+				playAnim('danceRight');
 			else
-				playAnim(danceAnimation[1]);
+				playAnim('danceLeft');
 		}
-		else if (danceAnimation[0] != null && animation.getByName(danceAnimation[0]) != null)
-			playAnim(danceAnimation[0]);
+		else if (animation.getByName('idle') != null) {
+			playAnim('idle');
+		}
+	}
+
+	public var danceEveryNumBeats:Int = 2;
+	private var settingCharacterUp:Bool = true;
+
+	public function recalculateDanceIdle() {
+		var lastDanceIdle:Bool = danceIdle;
+
+		danceIdle = (animation.getByName('danceLeft') != null && animation.getByName('danceRight') != null);
+
+		if(settingCharacterUp)
+		{
+			danceEveryNumBeats = (danceIdle ? 1 : 2);
+		}
+		else if(lastDanceIdle != danceIdle)
+		{
+			var calc:Float = danceEveryNumBeats;
+			if(danceIdle)
+				calc /= 2;
+			else
+				calc *= 2;
+
+			danceEveryNumBeats = Math.round(Math.max(calc, 1));
+		}
+
+		settingCharacterUp = false;
 	}
 
 	public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void

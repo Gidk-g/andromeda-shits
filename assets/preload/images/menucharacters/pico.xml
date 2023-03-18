@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TextureAtlas imagePath="spritesheet.png">
-	<!-- Created with Adobe Animate version 21.0.1.37179 -->
+	<!-- Created with Adobe Animate version 20.0.3.25487 -->
 	<!-- http://www.adobe.com/products/animate.html -->
 	<SubTexture name="idle0000" x="4" y="4" width="205" height="217" pivotX="0.05" pivotY="6.25" frameX="0" frameY="-6" frameWidth="213" frameHeight="224"/>
 	<SubTexture name="idle0001" x="4" y="4" width="205" height="217" frameX="0" frameY="-6" frameWidth="213" frameHeight="224"/>

@@ -1,16 +1,15 @@
 package;
 
+import haxe.Json;
 import sys.io.File;
 import sys.FileSystem;
-import haxe.Json;
 import openfl.utils.Assets;
 
 typedef SwagStoryCharacter =
 {
 	var animations:Array<SwagStoryAnimation>;
-	var danceAnimation:Array<String>;
-	var scale:Float;
 	var antialiasing:Bool;
+	var scale:Float;
 	var flipX:Bool;
 	var flipY:Bool;
 }

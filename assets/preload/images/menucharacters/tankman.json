@@ -1,0 +1,21 @@
+{
+	"animations": [
+		{
+			"animation": "idle",
+			"prefix": "idle",
+			"framerate": 24,
+			"looped": false,
+			"indices": [],
+			"flipX": false,
+			"flipY": false,
+			"offset": [
+				40,
+				-50
+			]
+		}
+	],
+	"scale": 1,
+	"antialiasing": true,
+	"flipX": false,
+	"flipY": false
+}

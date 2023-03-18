@@ -27,9 +27,6 @@
 			]
 		}
 	],
-	"danceAnimation": [
-		"idle"
-	],
 	"scale": 1,
 	"antialiasing": true,
 	"flipX": false,
