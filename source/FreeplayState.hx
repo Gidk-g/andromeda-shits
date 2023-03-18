@@ -232,8 +232,9 @@ class FreeplayState extends MusicBeatState
 			PlayState.isStoryMode = false;
 			PlayState.storyDifficulty = curDifficulty;
 
-			PlayState.storyWeek = songs[curSelected].week;
-			trace('CUR WEEK' + PlayState.storyWeek);
+			// PlayState.storyWeek = songs[curSelected].week;
+			// trace('CUR WEEK' + PlayState.storyWeek);
+
 			if (FlxG.keys.pressed.SHIFT){
 				FlxG.switchState(new ChartingState());
 			}else{
