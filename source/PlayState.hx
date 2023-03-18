@@ -999,7 +999,9 @@ class PlayState extends MusicBeatState
 		add(strumLineNotes);
 		add(grpNoteSplashes);
 
-		var splash:NoteSplash = new NoteSplash(100, 100, 0);
+		var daTex:String='';
+
+		var splash:NoteSplash = new NoteSplash(100, 100, 0, daTex);
 		grpNoteSplashes.add(splash);
 		splash.alpha = 0.0;
 
