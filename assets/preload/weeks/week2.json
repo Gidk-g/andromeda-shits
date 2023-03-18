@@ -1,14 +1,8 @@
 {
 	"songs": [
-		{
-			"name": "Spookeez"
-		},
-		{
-			"name": "South"
-		},
-		{
-			"name": "Monster"
-		}
+		"Spookeez",
+		"South",
+        "Monster"
 	],
 	"characters": [
 		"spooky",

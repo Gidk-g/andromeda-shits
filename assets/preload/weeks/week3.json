@@ -1,14 +1,8 @@
 {
 	"songs": [
-		{
-			"name": "Pico"
-		},
-		{
-			"name": "Philly"
-		},
-		{
-			"name": "Blammed"
-		}
+        "Pico",
+        "Philly",
+        "Blammed"
 	],
 	"characters": [
 		"pico",

@@ -269,7 +269,7 @@ class StoryMenuState extends MusicBeatState
 
 			final daWeek:SwagWeek = loadedWeeks[curWeek];
 			for (i in 0...daWeek.songs.length)
-				PlayState.storyPlaylist.push(daWeek.songs[i].name);
+				PlayState.storyPlaylist.push(daWeek.songs[i]);
 
 			// adjusting the song name to be compatible
 			var songFormat = StringTools.replace(PlayState.storyPlaylist[0], " ", "-");
@@ -378,7 +378,7 @@ class StoryMenuState extends MusicBeatState
 		txtTracklist.text = "Tracks\n";
 
 		for (i in 0...daWeek.songs.length)
-			txtTracklist.text += "\n" + daWeek.songs[i].name;
+			txtTracklist.text += "\n" + daWeek.songs[i];
 
 		txtTracklist.text = txtTracklist.text.toUpperCase();
 		txtTracklist.screenCenter(X);

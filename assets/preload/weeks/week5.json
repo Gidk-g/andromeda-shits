@@ -1,14 +1,8 @@
 {
 	"songs": [
-		{
-			"name": "Cocoa"
-		},
-		{
-			"name": "Eggnog"
-		},
-		{
-			"name": "Winter-Horrorland"
-		}
+        "Cocoa",
+        "Eggnog",
+        "Winter-Horrorland"
 	],
 	"characters": [
 		"parents-christmas",

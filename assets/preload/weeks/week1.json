@@ -1,14 +1,8 @@
 {
 	"songs": [
-		{
-			"name": "Bopeebo"
-		},
-		{
-			"name": "Fresh"
-		},
-		{
-			"name": "Dadbattle"
-		}
+        "Bopeebo",
+        "Fresh",
+        "Dadbattle"
 	],
 	"characters": [
 		"dad",

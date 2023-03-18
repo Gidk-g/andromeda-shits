@@ -7,7 +7,7 @@ import haxe.Json;
 
 typedef SwagWeek =
 {
-	var songs:Array<SwagSongs>;
+	var songs:Array<String>;
 	var characters:Array<String>;
 	var name:String;
 	var locked:Bool;
@@ -15,11 +15,6 @@ typedef SwagWeek =
 	var backgroundColor:String;
 	var unlockAfter:String;
 	var hiddenUntilUnlocked:Bool;
-}
-
-typedef SwagSongs =
-{
-	var name:String;
 }
 
 class Week

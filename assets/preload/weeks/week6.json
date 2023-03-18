@@ -1,14 +1,8 @@
 {
 	"songs": [
-		{
-			"name": "Senpai"
-		},
-		{
-			"name": "Roses"
-		},
-		{
-			"name": "Thorns"
-		}
+        "Senpai",
+        "Roses",
+        "Thorns"
 	],
 	"characters": [
 		"senpai",
