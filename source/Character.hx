@@ -29,7 +29,6 @@ class Character extends FlxSprite
 	public var holdTimer:Float = 0;
 	public var camOffset:Array<Int> = [0,0];
 	public var barColor:FlxColor = FlxColor.WHITE;
-    public var danceSpeed:Float = 2;
 
 	public static var charsBitmaps:Map<String,FlxGraphic> = new Map<String,FlxGraphic>();
 
@@ -675,18 +674,16 @@ class Character extends FlxSprite
 		{
 			holding=false;
 			if(animation.getByName("idle"+alt)!=null){
-				if (Math.abs(instance.curBeat) % danceSpeed == 0){
-					playAnim("idle"+alt,true);
-				}
+				playAnim("idle"+alt);
 			}else if (animation.getByName("danceRight"+alt)!=null && animation.getByName("danceLeft"+alt)!=null){
 				if (!animation.curAnim.name.startsWith('hair'))
 				{
-					danced = Math.abs(instance.curBeat) % danceSpeed == 1;
+					danced = Math.abs(instance.curBeat) % 2 == 1;
 
 					if (danced)
-						playAnim('danceRight'+alt,true);
+						playAnim('danceRight'+alt);
 					else
-						playAnim('danceLeft'+alt,true);
+						playAnim('danceLeft'+alt);
 				}
 			}
 		}
