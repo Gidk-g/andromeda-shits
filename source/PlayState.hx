@@ -1288,18 +1288,6 @@ class PlayState extends MusicBeatState
 		Lua_helper.add_callback(lua.state, "stringTrim", function(str:String) {
 			return str.trim();
 		});
-		Lua_helper.add_callback(lua.state, "setDefaultZoom", function(value:Float)
-		{
-			defaultCamZoom = value;
-		});
-		Lua_helper.add_callback(lua.state, "setGF", function(value:String)
-		{
-			gfVersion = value;
-		});
-		Lua_helper.add_callback(lua.state, "curGF", function()
-		{
-			return gfVersion;
-		});
 		Lua_helper.add_callback(lua.state, "mouseClicked", function(button:String) {
 			var boobs = FlxG.mouse.justPressed;
 			switch(button){
