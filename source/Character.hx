@@ -29,6 +29,7 @@ class Character extends FlxSprite
 	public var holdTimer:Float = 0;
 	public var camOffset:Array<Int> = [0,0];
 	public var barColor:FlxColor = FlxColor.WHITE;
+	public var danceIdle:Bool = false;
 
 	public static var charsBitmaps:Map<String,FlxGraphic> = new Map<String,FlxGraphic>();
 
@@ -473,6 +474,7 @@ class Character extends FlxSprite
 				playAnim("danceRight");
 		}
 
+		recalculateDanceIdle();
 		dance();
 
 		if (isPlayer)
@@ -653,17 +655,10 @@ class Character extends FlxSprite
 			}
 		}
 
-		switch (curCharacter)
-		{
-			case 'gf':
-				if (animation.curAnim.name == 'hairFall' && animation.curAnim.finished)
-					playAnim('danceRight');
-		}
-
 		super.update(elapsed);
 	}
 
-	private var danced:Bool = false;
+	public var danced:Bool = false;
 
 	/**
 	 * FOR GF DANCING SHIT
@@ -673,20 +668,20 @@ class Character extends FlxSprite
 		if (!debugMode && !disabledDance)
 		{
 			holding=false;
-			if(animation.getByName("idle"+alt)!=null){
-				playAnim("idle"+alt);
-			}else if (animation.getByName("danceRight"+alt)!=null && animation.getByName("danceLeft"+alt)!=null){
-				if (!animation.curAnim.name.startsWith('hair'))
-				{
-					danced = Math.abs(instance.curBeat) % 2 == 1;
+			if(danceIdle)
+			{
+				danced = !danced;
 
-					if (danced)
-						playAnim('danceRight'+alt);
-					else
-						playAnim('danceLeft'+alt);
-				}
+				if (danced)
+					playAnim('danceRight' + alt);
+				else
+					playAnim('danceLeft' + alt);
+			}
+			else if(animation.getByName('idle' + alt) != null) {
+				playAnim('idle' + alt);
 			}
 		}
+		danceIdle = (animation.getByName('danceLeft' + alt) != null && animation.getByName('danceRight' + alt) != null);
 	}
 
 	public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void
@@ -695,7 +690,7 @@ class Character extends FlxSprite
 			AnimName = AnimName.substring(0,AnimName.length-4);
 		}
 		
-		//animation.getByName(AnimName).frameRate=animation.getByName(AnimName).frameRate;
+		// animation.getByName(AnimName).frameRate=animation.getByName(AnimName).frameRate;
 		
 		animation.play(AnimName, Force, Reversed, Frame);
 		curAnim = AnimName;
@@ -724,6 +719,29 @@ class Character extends FlxSprite
 				danced = !danced;
 			}
 		}
+	}
+
+	public var danceEveryNumBeats:Int = 2;
+	private var settingCharacterUp:Bool = true;
+
+	public function recalculateDanceIdle() {
+		var lastDanceIdle:Bool = danceIdle;
+
+		if(settingCharacterUp)
+		{
+			danceEveryNumBeats = (danceIdle ? 1 : 2);
+		}
+		else if(lastDanceIdle != danceIdle)
+		{
+			var calc:Float = danceEveryNumBeats;
+			if(danceIdle)
+				calc /= 2;
+			else
+				calc *= 2;
+
+			danceEveryNumBeats = Math.round(Math.max(calc, 1));
+		}
+		settingCharacterUp = false;
 	}
 
 	public function addOffset(name:String, x:Float = 0, y:Float = 0)
