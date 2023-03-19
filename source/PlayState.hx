@@ -1271,11 +1271,6 @@ class PlayState extends MusicBeatState
 			Lua_helper.add_callback(lua.state, "changeBPM", function(bpm:Int){
 				Conductor.changeBPM(bpm);
 			});
-			Lua_helper.add_callback(lua.state, "removeStage", function(){
-                remove(bg);
-                remove(stageFront);
-                remove(stageCurtains);
-			});
 		Lua_helper.add_callback(lua.state, "stringStartsWith", function(str:String, start:String) {
 			return str.startsWith(start);
 		});
