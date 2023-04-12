@@ -603,6 +603,7 @@ var UI_noteTex:FlxUIInputText;
 		_song.noteskin = UI_noteskin.text;
 		_song.strumskin = UI_strumskin.text;
 		_song.notescale = UI_notescale.value;
+		_song.splashskin = UI_splashskin.text;
 		strumLine.y = getYfromStrum((Conductor.songPosition - sectionStartTime()) % (Conductor.stepCrochet * _song.notes[curSection].lengthInSteps));
 
 		if (curBeat % 4 == 0 && curStep >= 16 * (curSection + 1))
@@ -1391,6 +1392,7 @@ var UI_noteTex:FlxUIInputText;
 				speed: 1,
 				noteskin: 'NOTE_assets',
 				strumskin:'NOTE_assets',
+				splashskin: 'noteSplashes',
 				pixelStage:false,
 				validScore: false,
 			},
