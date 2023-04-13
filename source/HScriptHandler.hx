@@ -120,7 +120,7 @@ class HScriptHandler
         });
 
         interp.variables.set("loadScript", function(script_path:String) {
-            var new_script = new HScriptHandler(TitleState.curDir + "/" + script_path + ".hx");
+            var new_script = new HScriptHandler(TitleState.curDir + "/" + script_path);
             new_script.start();
             
             if(createPost)
