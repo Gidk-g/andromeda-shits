@@ -42,7 +42,7 @@ class FreeplayState extends MusicBeatState
 	public var dirs = [];
 	override function create()
 	{
-		if (Assets.exists(Paths.txt('freeplaySonglist')))
+		// if (Assets.exists(Paths.txt('freeplaySonglist')))
 		{
 		    var initSonglist = CoolUtil.coolTextFile(Paths.txt('freeplaySonglist'));
 		    for (i in 0...initSonglist.length)
@@ -56,7 +56,7 @@ class FreeplayState extends MusicBeatState
 
 		for (u in TitleState.directories)
 		{
-		    if (FileSystem.exists('mods/' + u + '/data/freeplaySonglist.txt'))
+		    // if (FileSystem.exists('mods/' + u + '/data/freeplaySonglist.txt'))
 			{
 			    var bobsongs = CoolUtil.coolTextFile3('mods/' + u + '/data/freeplaySonglist.txt');
 			    for (i in 0...bobsongs.length)
