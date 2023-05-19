@@ -3,6 +3,7 @@ package;
 #if desktop
 import Discord.DiscordClient;
 #end
+import openfl.utils.Assets;
 import flash.text.TextField;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -41,38 +42,39 @@ class FreeplayState extends MusicBeatState
 	public var dirs = [];
 	override function create()
 	{
-		
-		var initSonglist = CoolUtil.coolTextFile(Paths.txt('freeplaySonglist'));
-
-		for (i in 0...initSonglist.length)
+		if (Assets.exists(Paths.txt('freeplaySonglist')))
 		{
-			var data = initSonglist[i].split(" ");
-			var icon = data.splice(0,1)[0];
-			songs.push(new SongMetadata(data.join(" "), 1, icon));
-			dirs.push("assets");
+		    var initSonglist = CoolUtil.coolTextFile(Paths.txt('freeplaySonglist'));
+		    for (i in 0...initSonglist.length)
+		    {
+			    var data = initSonglist[i].split(" ");
+			    var icon = data.splice(0,1)[0];
+			    songs.push(new SongMetadata(data.join(" "), 1, icon));
+			    dirs.push("assets");
+		    }
 		}
 
-		for (u in TitleState.directories){
-			var bobsongs = CoolUtil.coolTextFile3('mods/' + u + '/data/freeplaySonglist.txt');
-			
-			for (i in 0...bobsongs.length)
+		for (u in TitleState.directories)
+		{
+		    if (FileSystem.exists('mods/' + u + '/data/freeplaySonglist.txt'))
 			{
-				var data = bobsongs[i].split(" ");
-				var icon = data.splice(0,1)[0];
-				songs.push(new SongMetadata(data.join(" "), 1, icon));
-				dirs.push('mods/'+u);
-			}
-			TitleState.curDir = "assets";
+			    var bobsongs = CoolUtil.coolTextFile3('mods/' + u + '/data/freeplaySonglist.txt');
+			    for (i in 0...bobsongs.length)
+			    {
+				    var data = bobsongs[i].split(" ");
+				    var icon = data.splice(0,1)[0];
+				    songs.push(new SongMetadata(data.join(" "), 1, icon));
+				    dirs.push('mods/'+u);
+			    }
+			    TitleState.curDir = "assets";
+		    }
 		}
-		
-		
 
-			if (FlxG.sound.music != null)
-			{
-				if (!FlxG.sound.music.playing)
-					FlxG.sound.playMusic(Paths.music('freakyMenu'));
-			}
-
+		if (FlxG.sound.music != null)
+		{
+			if (!FlxG.sound.music.playing)
+				FlxG.sound.playMusic(Paths.music('freakyMenu'));
+		}
 
 		#if desktop
 		// Updating Discord Rich Presence
@@ -254,7 +256,7 @@ class FreeplayState extends MusicBeatState
 			
 		var poop:String = Highscore.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty);
 		if (!FileSystem.exists(TitleState.curDir+'/data/'+songs[curSelected].songName.toLowerCase()+'/'+poop+'.json')){
-			//curDifficulty = 1;
+			// curDifficulty = 1;
 		}
 		#if !switch
 		intendedScore = Highscore.getScore(songs[curSelected].songName, curDifficulty);

@@ -3887,11 +3887,8 @@ class PlayState extends MusicBeatState
 				}
 				boyfriend.holdTimer=0;
 			}
-		
 		}
-		
-		*/
-/**/
+
 		if(ScoreUtils.botPlay){
 			for(note in hittableNotes){
 				if(note.mustPress && note.canBeHit && note.strumTime<=Conductor.songPosition){
