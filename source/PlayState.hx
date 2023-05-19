@@ -3889,6 +3889,9 @@ class PlayState extends MusicBeatState
 			}
 		}
 
+		*/
+/**/
+
 		if(ScoreUtils.botPlay){
 			for(note in hittableNotes){
 				if(note.mustPress && note.canBeHit && note.strumTime<=Conductor.songPosition){
