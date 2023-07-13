@@ -1383,56 +1383,6 @@ class PlayState extends MusicBeatState
 			return Reflect.getProperty(controller.justReleased, name) == true;
 		});
 
-		Lua_helper.add_callback(lua.state, "keyJustPressed", function(name:String) {
-			var key:Bool = false;
-			switch(name) {
-				case 'left': key = controls.LEFT;
-				case 'down': key = controls.DOWN;
-				case 'up': key = controls.UP;
-				case 'right': key = controls.RIGHT;
-				case 'leftP': key = controls.LEFT_P;
-				case 'downP': key = controls.DOWN_P;
-				case 'upP': key = controls.UP_P;
-				case 'rightP': key = controls.RIGHT_P;
-				case 'back': key = controls.BACK;
-				case 'enter': key = FlxG.keys.justPressed.ENTER;
-				case 'reset': key = controls.RESET;
-				case 'space': key = FlxG.keys.justPressed.SPACE;
-			}
-			return key;
-		});
-		Lua_helper.add_callback(lua.state, "keyPressed", function(name:String) {
-			var key:Bool = false;
-			switch(name) {
-				case 'left': key = controls.LEFT;
-				case 'down': key = controls.DOWN;
-				case 'up': key = controls.UP;
-				case 'right': key = controls.RIGHT;
-				case 'leftP': key = controls.LEFT_P;
-				case 'downP': key = controls.DOWN_P;
-				case 'upP': key = controls.UP_P;
-				case 'rightP': key = controls.RIGHT_P;
-				case 'enter': key = FlxG.keys.justPressed.ENTER;
-				case 'space': key = FlxG.keys.pressed.SPACE;
-			}
-			return key;
-		});
-		Lua_helper.add_callback(lua.state, "keyReleased", function(name:String) {
-			var key:Bool = false;
-			switch(name) {
-				case 'left': key = controls.LEFT;
-				case 'down': key = controls.DOWN;
-				case 'up': key = controls.UP;
-				case 'right': key = controls.RIGHT;
-				case 'leftP': key = controls.LEFT_P;
-				case 'downP': key = controls.DOWN_P;
-				case 'upP': key = controls.UP_P;
-				case 'rightP': key = controls.RIGHT_P;
-				case 'enter': key = FlxG.keys.justPressed.ENTER;
-				case 'space': key = FlxG.keys.justReleased.SPACE;
-			}
-			return key;
-		});
 		Lua_helper.add_callback(lua.state, "setHealthBarColors", function(leftHex:String, rightHex:String) {
 			var left:FlxColor = Std.parseInt(leftHex);
 			if(!leftHex.startsWith('0x')) left = Std.parseInt('0xff' + leftHex);
