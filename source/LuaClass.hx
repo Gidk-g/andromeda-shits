@@ -6,6 +6,7 @@ import llua.Convert;
 import llua.Lua;
 import llua.State;
 import llua.LuaL;
+import flixel.util.FlxColor;
 import flixel.util.FlxAxes;
 import flixel.FlxSprite;
 import lime.app.Application;
@@ -551,6 +552,37 @@ class LuaSprite extends LuaClass {
     return 2;
   }
 
+  private static function makeGraphic(l:StatePointer):Int{
+    // 1 = self
+    // 2 = width
+    // 3 = height
+    // 4 = color
+    // 5 = unique
+    // 6 = key
+    var width:Int = Std.int(LuaL.checknumber(state,2));
+    var height:Int = Std.int(LuaL.checknumber(state,3));
+    var color:FlxColor = FlxColor.WHITE;
+    var unique:Null<Bool> = null;
+    var key:Null<String> = null;
+    if(Lua.isnumber(state,4))
+      color=FlxColor.fromInt(Std.int(Lua.tonumber(state,4)));
+    if(Lua.isstring(state,4))
+      color = FlxColor.fromString(Lua.tostring(state,4));
+    if(Lua.isboolean(state,5))
+      unique=Lua.toboolean(state,5);
+    if(Lua.isstring(state,6))
+      key=Lua.tostring(state,6);
+
+
+    Lua.getfield(state,1,"spriteName");
+    var spriteName = Lua.tostring(state,-1);
+    var sprite = PlayState.currentPState.luaSprites[spriteName];
+    sprite.makeGraphic(width,height,color,unique,key);
+
+    Lua.pushvalue(state,1);
+    return 1;
+  }
+
   private static function playAnimSprite(l:StatePointer):Int{
     // 1 = self
     // 2 = anim
@@ -608,6 +640,30 @@ class LuaSprite extends LuaClass {
 
   }
   
+  private static function tweenColor(l:StatePointer):Int{
+    // 1 = self
+    // 2 = startColour
+    // 3 = endColour
+    // 4 = time
+    // 5 = easing-style
+    var startColour:FlxColor = cast LuaL.checknumber(state,2);
+    var endColour:FlxColor = cast LuaL.checknumber(state,3);
+    var time = LuaL.checknumber(state,4);
+    var style = LuaL.checkstring(state,5);
+    Lua.getfield(state,1,"spriteName");
+    var spriteName = Lua.tostring(state,-1);
+    var sprite = PlayState.currentPState.luaSprites[spriteName];
+    var luaObj = LuaStorage.objects[spriteName];
+    /*FlxTween.tween(sprite,properties,time,{
+      ease: Reflect.field(FlxEase,style),
+    });*/
+    FlxTween.color(sprite, time, FlxColor.fromInt(startColour), FlxColor.fromInt(endColour), {
+      ease: Reflect.field(FlxEase,style),
+    });
+    return 1;
+
+  }
+
   private static function setBlendMode(l:StatePointer):Int{
     // 1 = self
     // 2 = blend
@@ -639,10 +695,10 @@ class LuaSprite extends LuaClass {
   private static var loadGraphicC:cpp.Callable<StatePointer->Int> = cpp.Callable.fromStaticFunction(loadGraphic);
   private static var setFramesC:cpp.Callable<StatePointer->Int> = cpp.Callable.fromStaticFunction(setFrames);
   private static var playAnimSpriteC:cpp.Callable<StatePointer->Int> = cpp.Callable.fromStaticFunction(playAnimSprite);
+  private static var makeGraphicC:cpp.Callable<StatePointer->Int> = cpp.Callable.fromStaticFunction(makeGraphic);
   private static var tweenC:cpp.Callable<StatePointer->Int> = cpp.Callable.fromStaticFunction(tween);
+  private static var tweenColorC:cpp.Callable<StatePointer->Int> = cpp.Callable.fromStaticFunction(tweenColor);
   private static var setCameraC:cpp.Callable<StatePointer->Int> = cpp.Callable.fromStaticFunction(setCamera);
-  
-  
   private static var setDepthC:cpp.Callable<StatePointer->Int> = cpp.Callable.fromStaticFunction(setDepth);
 
   public function new(sprite:FlxSprite,name:String,?addToGlobal:Bool=true){
@@ -795,6 +851,17 @@ class LuaSprite extends LuaClass {
           return 0;
         }
       },
+      "tweenColor"=>{
+        defaultValue:0,
+        getter:function(l:State,data:Any){
+          Lua.pushcfunction(l,tweenColorC);
+          return 1;
+        },
+        setter:function(l:State){
+          LuaL.error(l,"tweenColor is read-only.");
+          return 0;
+        }
+      },
       "getProperty"=>{
         defaultValue:0,
         getter:function(l:State,data:Any){
@@ -828,7 +895,6 @@ class LuaSprite extends LuaClass {
           return 0;
         }
       },
-	  
       "screenCenter"=>{
         defaultValue:0,
         getter:function(l:State,data:Any){
@@ -848,6 +914,17 @@ class LuaSprite extends LuaClass {
         },
         setter:function(l:State){
           LuaL.error(l,"loadGraphic is read-only.");
+          return 0;
+        }
+      },
+      "makeGraphic"=>{
+        defaultValue:0,
+        getter:function(l:State,data:Any){
+          Lua.pushcfunction(l,makeGraphicC);
+          return 1;
+        },
+        setter:function(l:State){
+          LuaL.error(l,"makeGraphic is read-only.");
           return 0;
         }
       },
@@ -956,6 +1033,38 @@ class LuaSprite extends LuaClass {
             return 0;
           }
           sprite.scrollFactor.set(sprite.scrollFactor.x,Lua.tonumber(l,3));
+          LuaClass.DefaultSetter(l);
+          return 0;
+        }
+      },
+      "scaleX"=>{ // TODO: sprite.scale.x
+        defaultValue:sprite.scale.x,
+        getter:function(l:State,data:Any){
+          Lua.pushnumber(l,sprite.scale.x);
+          return 1;
+        },
+        setter:function(l:State){
+          if(Lua.type(l,3)!=Lua.LUA_TNUMBER){
+            LuaL.error(l,"invalid argument #3 (number expected, got " + Lua.typename(l,Lua.type(l,3)) + ")");
+            return 0;
+          }
+          sprite.scale.set(Lua.tonumber(l,3),sprite.scale.y);
+          LuaClass.DefaultSetter(l);
+          return 0;
+        }
+      },
+      "scaleY"=>{ // TODO: sprite.scale.y
+        defaultValue:sprite.scale.x,
+        getter:function(l:State,data:Any){
+          Lua.pushnumber(l,sprite.scale.y);
+          return 1;
+        },
+        setter:function(l:State){
+          if(Lua.type(l,3)!=Lua.LUA_TNUMBER){
+            LuaL.error(l,"invalid argument #3 (number expected, got " + Lua.typename(l,Lua.type(l,3)) + ")");
+            return 0;
+          }
+          sprite.scale.set(sprite.scale.x,Lua.tonumber(l,3));
           LuaClass.DefaultSetter(l);
           return 0;
         }
