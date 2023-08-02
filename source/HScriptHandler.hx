@@ -89,19 +89,15 @@ class HScriptHandler
 
         interp.variables.set("import", function(class_name:String) {
             var classes = class_name.split(".");
-
             if(Type.resolveClass(class_name) != null)
                 interp.variables.set(classes[classes.length - 1], Type.resolveClass(class_name));
             else if(Type.resolveEnum(class_name) != null)
             {
                 var enum_new = {};
                 var good_enum = Type.resolveEnum(class_name);
-
-                for(constructor in good_enum.getConstructors())
-                {
+                for(constructor in good_enum.getConstructors()) {
                     Reflect.setField(enum_new, constructor, good_enum.createByName(constructor));
                 }
-
                 interp.variables.set(classes[classes.length - 1], enum_new);
             }
             else
@@ -122,12 +118,9 @@ class HScriptHandler
         interp.variables.set("loadScript", function(script_path:String) {
             var new_script = new HScriptHandler(TitleState.curDir + "/" + script_path);
             new_script.start();
-            
             if(createPost)
                 new_script.callFunction("createPost");
-
             other_scripts.push(new_script);
-
             return other_scripts.length - 1;
         });
 
