@@ -104,6 +104,20 @@ class TitleState extends MusicBeatState
 		#end
 	}
 
+	static public function getModFolders():Array<String> {
+		var list:Array<String> = [];
+		var modsFolder:String = "mods/";
+		if(FileSystem.exists(modsFolder)) {
+			for (folder in FileSystem.readDirectory(modsFolder)) {
+				var path = haxe.io.Path.join([modsFolder, folder]);
+				if (FileSystem.isDirectory(path) && !list.contains(folder)) {
+					list.push(folder);
+				}
+			}
+		}
+		return list;
+	}
+
 	var logoBl:FlxSprite;
 	var gfDance:FlxSprite;
 	var danceLeft:Bool = false;

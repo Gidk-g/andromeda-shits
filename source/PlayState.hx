@@ -3503,15 +3503,12 @@ class PlayState extends MusicBeatState
 				FlxG.switchState(new StoryMenuState());
 				Cache.Clear();
 
-				StoryMenuState.weekCompleted.set(StoryMenuState.loadedWeekList[storyWeek], true);
-
 				if (SONG.validScore)
 				{
 					//NGio.unlockMedal(60961);
 					Highscore.saveWeekScore(storyWeek, campaignScore, storyDifficulty);
 				}
 
-				FlxG.save.data.weekCompleted = StoryMenuState.weekCompleted;
 				FlxG.save.flush();
 				FlxG.sound.music.stop();
 				trace(SONG.song.toLowerCase());
