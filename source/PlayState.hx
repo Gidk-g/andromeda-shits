@@ -298,6 +298,7 @@ class PlayState extends MusicBeatState
 
 	var inCutscene:Bool = false;
 
+	public var luaFuncs:Array<String> = [];
 	public static var storyDifficultyText:String = "";
 
 	// Discord RPC variables
@@ -467,7 +468,7 @@ class PlayState extends MusicBeatState
 		}
 
 		if(luaModchartExists && lua!=null){
-			lua.call("create",[]);
+			callLua("create",[]);
 		}
 		switch (SONG.song.toLowerCase())
 		{
@@ -1213,6 +1214,8 @@ class PlayState extends MusicBeatState
 
 			lua.setGlobalVar("curBeat",0);
 			lua.setGlobalVar("curStep",0);
+			lua.setGlobalVar("crochet",Conductor.crochet);
+			lua.setGlobalVar("stepCrochet",Conductor.stepCrochet);
 			lua.setGlobalVar("songPosition",Conductor.songPosition);
 			lua.setGlobalVar("bpm",Conductor.bpm);
 			lua.setGlobalVar("XY","XY");
@@ -1220,9 +1223,31 @@ class PlayState extends MusicBeatState
 			lua.setGlobalVar("Y","Y");
 			lua.setGlobalVar("version",SONG.version);
 			lua.setGlobalVar("GameVersion",1.2);
-
 		    lua.setGlobalVar('isStoryMode', isStoryMode);
 		    lua.setGlobalVar('difficulty', storyDifficulty);
+			lua.setGlobalVar("width",FlxG.width);
+			lua.setGlobalVar("height",FlxG.height);
+			lua.setGlobalVar("black",FlxColor.BLACK);
+			lua.setGlobalVar("white",FlxColor.WHITE);
+
+			var timerCount:Int = 0;
+			Lua_helper.add_callback(lua.state,"startTimer", function(time: Float){
+				// 1 = time
+				// 2 = callback
+
+				var name = 'timerCallbackNum${timerCount}';
+				Lua.pushvalue(lua.state,2);
+				Lua.setglobal(lua.state, name);
+				luaFuncs.push(name);
+
+				new FlxTimer().start(time, function(t:FlxTimer){
+					callLua(name,[]);
+
+				});
+
+				timerCount++;
+
+			});
 
 			Lua_helper.add_callback(lua.state,"skipCountdown", function(){
 				skipCountdown = true;
@@ -1258,6 +1283,9 @@ class PlayState extends MusicBeatState
 												}
 											}
 			});
+			Lua_helper.add_callback(lua.state,"colorFromString", function(str:String){
+				return Std.int(FlxColor.fromString(str));
+			});
 			Lua_helper.add_callback(lua.state,"playSound", function(snd:String,vol:Float=1,loop:Bool=false){
 				FlxG.sound.play(Paths.sound(snd),vol,loop);
 			});
@@ -1282,6 +1310,12 @@ class PlayState extends MusicBeatState
 		});
 		Lua_helper.add_callback(lua.state, "stringTrim", function(str:String) {
 			return str.trim();
+		});
+		Lua_helper.add_callback(lua.state,"addQuick", function(name:String, val:Dynamic){
+			FlxG.watch.addQuick(name, val);
+		});
+		Lua_helper.add_callback(lua.state,"log", function(string:String){
+			FlxG.log.add(string);
 		});
 		Lua_helper.add_callback(lua.state, "mouseClicked", function(button:String) {
 			var boobs = FlxG.mouse.justPressed;
@@ -1669,10 +1703,21 @@ class PlayState extends MusicBeatState
 				trace("ERROR: " + e);
 			};
 			
-			
+			Lua.pushvalue(lua.state, Lua.LUA_GLOBALSINDEX);
+			Lua.pushnil(lua.state);
+			while(Lua.next(lua.state, -2) != 0) {
+				// key = -2
+				// value = -1
+				if(Lua.isfunction(lua.state, -1) && Lua.isstring(lua.state,-2)){
+					var name:String = Lua.tostring(lua.state,-2);
+					luaFuncs.push(name);
+				}
+			Lua.pop(lua.state, 1);
+		  }
+		  Lua.pop(lua.state,1);
 			
 			if(luaModchartExists && lua!=null){
-				lua.call("createPost",[]);
+				callLua("createPost",[]);
 			}
 		}
 
@@ -2021,8 +2066,8 @@ class PlayState extends MusicBeatState
 			allScriptCall("startCountdown", [swagCounter]);
 
 			if(luaModchartExists && lua!=null){
-				lua.call("countdown", [swagCounter]);
-				lua.call("beatHit",[0]);
+				callLua("countdown", [swagCounter]);
+				callLua("beatHit",[0]);
 			}
 			var introAssets:Map<String, Array<String>> = new Map<String, Array<String>>();
 			introAssets.set('default', [assetPrefix+'ready'+assetSuffix, assetPrefix+"set"+assetSuffix, assetPrefix+"go"+assetSuffix]);
@@ -2122,16 +2167,16 @@ class PlayState extends MusicBeatState
 		startingSong = false;
 
 		if(luaModchartExists && lua!=null){
-			lua.call("startSong",[]);
+			callLua("startSong",[]);
 		}
 		if(luaModchartExists && lua!=null){
-			lua.call("beatHit",[0]);
+			callLua("beatHit",[0]);
 		}
 		if(luaModchartExists && lua!=null){
-			lua.call("stepHit",[0]);
+			callLua("stepHit",[0]);
 		}
 		if(luaModchartExists && lua!=null){
-			lua.call("songStart",[]);
+			callLua("songStart",[]);
 		}
 		
 		previousFrameTime = FlxG.game.ticks;
@@ -3148,7 +3193,7 @@ class PlayState extends MusicBeatState
 								altAnim = '-alt';
 						}
 						if(luaModchartExists && lua!=null){
-							lua.call("dadNoteHit",[Math.abs(daNote.noteData),daNote.strumTime,Conductor.songPosition,daNote.isSustainNote,daNote.noteType]); // TODO: Note lua class???
+							callLua("dadNoteHit",[Math.abs(daNote.noteData),daNote.strumTime,Conductor.songPosition,daNote.isSustainNote,daNote.noteType]); // TODO: Note lua class???
 						}
 						
 					    allScriptCall("enemyNoteHit", [daNote]);
@@ -3283,7 +3328,7 @@ class PlayState extends MusicBeatState
 		if (luaModchartExists && lua != null){
 			lua.setGlobalVar('stepCrochet', Conductor.stepCrochet);
 			lua.setGlobalVar('crochet', Conductor.crochet);
-			lua.call("update", [elapsed]);
+			callLua("update", [elapsed]);
 		}
 
 		if (FlxG.keys.justPressed.ONE){
@@ -3363,7 +3408,7 @@ class PlayState extends MusicBeatState
 				}
 				
 				if(luaModchartExists && lua!=null){
-					lua.call("dadTurn",[]);
+					callLua("dadTurn",[]);
 				}
 				
 				
@@ -3397,7 +3442,7 @@ class PlayState extends MusicBeatState
 				}
 				}
 					if(luaModchartExists && lua!=null){
-						lua.call("bfTurn",[]);
+						callLua("bfTurn",[]);
 					}
 				if (SONG.song.toLowerCase() == 'tutorial')
 				{
@@ -4203,7 +4248,7 @@ class PlayState extends MusicBeatState
 		allScriptCall("playerNoteHit", [note]);
 
 		if(luaModchartExists && lua!=null){
-			lua.call("goodNoteHit",[note.noteData,note.strumTime,Conductor.songPosition,note.isSustainNote,note.noteType]); // TODO: Note lua class???
+			callLua("goodNoteHit",[note.noteData,note.strumTime,Conductor.songPosition,note.isSustainNote,note.noteType]); // TODO: Note lua class???
 		}
 
 
@@ -4360,6 +4405,12 @@ class PlayState extends MusicBeatState
 		gf.playAnim('scared', true);
 	}
 
+	function callLua(name:String, args:Array<Any>, ?type: String): Any{
+		if(luaFuncs.contains(name))
+			return lua.call(name, args, type);
+		return null;
+	}
+
 	override function stepHit()
 	{
 		super.stepHit();
@@ -4372,7 +4423,7 @@ class PlayState extends MusicBeatState
 
 		if(luaModchartExists && lua!=null){
 			lua.setGlobalVar("curStep",curStep);
-			lua.call("stepHit",[curStep]);
+			callLua("stepHit",[curStep]);
 		}
 
 		if (dad.curCharacter == 'spooky' && curStep % 4 == 2)
@@ -4524,7 +4575,7 @@ class PlayState extends MusicBeatState
 
 		if(luaModchartExists && lua!=null){
 			lua.setGlobalVar("curBeat",curBeat);
-			lua.call("beatHit",[curBeat]);
+			callLua("beatHit",[curBeat]);
 		}
 
 		switch (curStage)
