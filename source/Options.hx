@@ -242,7 +242,7 @@ class Checkbox extends FlxSprite
 		super.update(elapsed);
 		if(tracker!=null){
 			x = tracker.x - 140;
-			y = tracker.y - 45;
+			y = tracker.y - 40;
 		}
 		if(animation.curAnim!=null){
 
