@@ -298,6 +298,31 @@ class LuaSprite extends LuaClass {
     return 0;
   }
 
+  private static function setScaleX(l:StatePointer):Int{
+    // 1 = self
+    // 2 = scale
+    var scale = LuaL.checknumber(state,2);
+    Lua.getfield(state,1,"spriteName");
+    var spriteName = Lua.tostring(state,-1);
+    var sprite = PlayState.currentPState.luaSprites[spriteName];
+    sprite.scale.x = scale;
+    return 0;
+  }
+
+  private static var setScaleXC:cpp.Callable<StatePointer->Int> = cpp.Callable.fromStaticFunction(setScaleX);
+
+  private static function setScaleY(l:StatePointer):Int{
+    // 1 = self
+    // 2 = scale
+    var scale = LuaL.checknumber(state,2);
+    Lua.getfield(state,1,"spriteName");
+    var spriteName = Lua.tostring(state,-1);
+    var sprite = PlayState.currentPState.luaSprites[spriteName];
+    sprite.scale.y = scale;
+    return 0;
+  }
+
+  private static var setScaleYC:cpp.Callable<StatePointer->Int> = cpp.Callable.fromStaticFunction(setScaleY);
 
   private static function setOrigin(l:StatePointer):Int{
     // 1 = self
