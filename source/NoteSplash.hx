@@ -10,6 +10,7 @@ class NoteSplash extends FlxSprite
 {
 	private var idleAnim:String;
 	private var textureLoaded:String = null;
+    public var daTex = PlayState.SONG.splashskin;
 
 	public function new(x:Float = 0, y:Float = 0, ?note:Int = 0, noteTexture:String=null) {
 		super(x, y);
@@ -17,7 +18,6 @@ class NoteSplash extends FlxSprite
 		var path = "";
 		var balls:Array<String> = [TitleState.curDir,"assets"];
 		var stopLookin = false;
-		var daTex = PlayState.SONG.splashskin;
 
 		if (noteTexture != null && noteTexture.length >0 && noteTexture != ''){
 			daTex = noteTexture;

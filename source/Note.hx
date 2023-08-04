@@ -40,6 +40,7 @@ class Note extends FlxSprite
 
 	public var noteScore:Float = 1;
 	public var noAnim:Bool = false;
+	public var daTex = PlayState.SONG.noteskin;
 
 	public var notescale:Float = 0.7;
 	public static var swagWidth:Float = 160 * 0.7;
@@ -105,7 +106,6 @@ class Note extends FlxSprite
 			var path = "";
 			var balls:Array<String> = [TitleState.curDir,"assets"];
 			var stopLookin = false;
-			var daTex = PlayState.SONG.noteskin;
 			if (noteTexture != null && noteTexture.length >0 && noteTexture != ''){
 				daTex = noteTexture;
 			}
