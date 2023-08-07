@@ -860,7 +860,7 @@ class PlayState extends MusicBeatState
 		        }
             }
 
-		allScriptCall("createStage");
+		allScriptCall("createStage", []);
 
 		if(curStage.startsWith('school')) {
 			introSoundsSuffix = '-pixel';
@@ -1782,7 +1782,7 @@ class PlayState extends MusicBeatState
 			script_funny.createPost = true;
 		}
 
-		allScriptCall("createPost");
+		allScriptCall("createPost", []);
 
 		super.create();
 	}
@@ -1791,13 +1791,13 @@ class PlayState extends MusicBeatState
 
 	var script:HScriptHandler;
 
-	function allScriptCall(func:String, ?args:Array<Dynamic>) {
+	public function allScriptCall(func:String, args:Array<Dynamic>) {
 		for (cool_script in scripts) {
 			cool_script.callFunction(func, args);
 		}
 	}
 
-	function allScriptSet(variable:String, value:Dynamic) {
+	public function allScriptSet(variable:String, value:Dynamic) {
 		for (cool_script in scripts) {
 			cool_script.interp.variables.set(variable, value);
 		}
@@ -2051,7 +2051,7 @@ class PlayState extends MusicBeatState
 	{
 		inCutscene = false;
 
-		allScriptCall("generateStaticArrows");
+		allScriptCall("generateStaticArrows", []);
 
 		generateStaticArrows(0);
 		generateStaticArrows(1);
@@ -3277,7 +3277,8 @@ class PlayState extends MusicBeatState
 							noteMiss(daNote.noteData);
 							totalNotes++;
 							vocals.volume = 0;
-						    allScriptCall("noteMiss", [daNote.noteData]);
+							callLua("noteMiss", [Math.abs(daNote.noteData),daNote.strumTime,Conductor.songPosition,daNote.isSustainNote,daNote.noteType]);
+						    allScriptCall("noteMiss", [Math.abs(daNote.noteData),daNote.strumTime,Conductor.songPosition,daNote.isSustainNote,daNote.noteType]);
 							updateAccuracy();
 						}
 
@@ -3417,7 +3418,7 @@ class PlayState extends MusicBeatState
 				if(luaModchartExists && lua!=null){
 					callLua("dadTurn",[]);
 				}
-				
+				allScriptCall("dadTurn", []);
 				
 				if (dad.curCharacter == 'mom')
 					vocals.volume = 1;
@@ -3451,6 +3452,7 @@ class PlayState extends MusicBeatState
 					if(luaModchartExists && lua!=null){
 						callLua("bfTurn",[]);
 					}
+					allScriptCall("bfTurn", []);
 				if (SONG.song.toLowerCase() == 'tutorial')
 				{
 					FlxTween.tween(FlxG.camera, {zoom: 1}, (Conductor.stepCrochet * 4 / 1000), {ease: FlxEase.elasticInOut});
@@ -4117,7 +4119,8 @@ class PlayState extends MusicBeatState
 
 	function noteMiss(direction:Int = 1):Void
 	{
-		allScriptCall("noteMiss", [direction]);
+		callLua("noteMiss", []);
+		allScriptCall("noteMiss", []);
 
 		boyfriend.holding=false;
 		misses++;
