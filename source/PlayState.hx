@@ -962,6 +962,7 @@ class PlayState extends MusicBeatState
 			script.start();
 			scripts.push(script);
 		}
+		allScriptSet("this", this);
 
 		if(boyfriend.curCharacter=='spirit'){
 			var evilTrail = new FlxTrail(boyfriend, null, 4, 24, 0.3, 0.069);
@@ -1793,6 +1794,12 @@ class PlayState extends MusicBeatState
 	function allScriptCall(func:String, ?args:Array<Dynamic>) {
 		for (cool_script in scripts) {
 			cool_script.callFunction(func, args);
+		}
+	}
+
+	function allScriptSet(variable:String, value:Dynamic) {
+		for (cool_script in scripts) {
+			cool_script.interp.variables.set(variable, value);
 		}
 	}
 
@@ -3196,7 +3203,7 @@ class PlayState extends MusicBeatState
 							callLua("dadNoteHit",[Math.abs(daNote.noteData),daNote.strumTime,Conductor.songPosition,daNote.isSustainNote,daNote.noteType]); // TODO: Note lua class???
 						}
 						
-					    allScriptCall("enemyNoteHit", [daNote]);
+					    allScriptCall("dadNoteHit",[Math.abs(daNote.noteData),daNote.strumTime,Conductor.songPosition,daNote.isSustainNote,daNote.noteType]);
 
 						if(health > modchart.opponentHPDrain){
 						health -= modchart.opponentHPDrain;
@@ -3270,7 +3277,7 @@ class PlayState extends MusicBeatState
 							noteMiss(daNote.noteData);
 							totalNotes++;
 							vocals.volume = 0;
-						    allScriptCall("playerNoteMiss", [daNote.noteData]);
+						    allScriptCall("noteMiss", [daNote.noteData]);
 							updateAccuracy();
 						}
 
@@ -4110,7 +4117,7 @@ class PlayState extends MusicBeatState
 
 	function noteMiss(direction:Int = 1):Void
 	{
-		allScriptCall("playerNoteMiss", [direction]);
+		allScriptCall("noteMiss", [direction]);
 
 		boyfriend.holding=false;
 		misses++;
@@ -4242,7 +4249,7 @@ class PlayState extends MusicBeatState
 
 		var strumLine = playerStrumLines.members[note.noteData%4];
 
-		allScriptCall("playerNoteHit", [note]);
+		allScriptCall("goodNoteHit",[note.noteData,note.strumTime,Conductor.songPosition,note.isSustainNote,note.noteType]);
 
 		if(luaModchartExists && lua!=null){
 			callLua("goodNoteHit",[note.noteData,note.strumTime,Conductor.songPosition,note.isSustainNote,note.noteType]); // TODO: Note lua class???
@@ -4310,6 +4317,21 @@ class PlayState extends MusicBeatState
 		var splash:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
 		splash.setupNoteSplash(x, y, data);
 		grpNoteSplashes.add(splash);
+	}
+
+	public function addBehindGF(obj:FlxBasic)
+	{
+		insert(members.indexOf(gf), obj);
+	}
+
+	public function addBehindBF(obj:FlxBasic)
+	{
+		insert(members.indexOf(boyfriend), obj);
+	}
+
+	public function addBehindDad(obj:FlxBasic)
+	{
+		insert(members.indexOf(dad), obj);
 	}
 
 	var fastCarCanDrive:Bool = true;
