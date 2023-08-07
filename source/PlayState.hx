@@ -3277,7 +3277,9 @@ class PlayState extends MusicBeatState
 							noteMiss(daNote.noteData);
 							totalNotes++;
 							vocals.volume = 0;
-							callLua("noteMiss", [Math.abs(daNote.noteData),daNote.strumTime,Conductor.songPosition,daNote.isSustainNote,daNote.noteType]);
+							if(luaModchartExists && lua!=null){
+							    callLua("noteMiss", [Math.abs(daNote.noteData),daNote.strumTime,Conductor.songPosition,daNote.isSustainNote,daNote.noteType]);
+							}
 						    allScriptCall("noteMiss", [Math.abs(daNote.noteData),daNote.strumTime,Conductor.songPosition,daNote.isSustainNote,daNote.noteType]);
 							updateAccuracy();
 						}
@@ -4119,8 +4121,10 @@ class PlayState extends MusicBeatState
 
 	function noteMiss(direction:Int = 1):Void
 	{
-		callLua("noteMiss", []);
-		allScriptCall("noteMiss", []);
+		if(luaModchartExists && lua!=null){
+			callLua("doMiss",[direction]);
+		}
+		allScriptCall("doMiss", [direction]);
 
 		boyfriend.holding=false;
 		misses++;
