@@ -126,8 +126,10 @@ class PlayState extends MusicBeatState
 	private var opponentStrumLines:FlxTypedGroup<FlxSprite>;
 	public var luaSprites:Map<String, Dynamic>;
 	public var luaObjects:Map<String, Dynamic>;
+	public var luaTexts:Map<String, Dynamic>;
 	public var unnamedLuaSprites:Int=0;
 	public var unnamedLuaShaders:Int=0;
+	public var unnamedLuaTexts:Int=0;
 	public var dadLua:LuaCharacter;
 	public var gfLua:LuaCharacter;
 	public var bfLua:LuaCharacter;
@@ -318,6 +320,7 @@ class PlayState extends MusicBeatState
 		modchart = new ModChart(this);
 		FlxG.sound.music.looped=false;
 		unnamedLuaSprites=0;
+		unnamedLuaTexts=0;
 		currentPState=this;
 		currentOptions = OptionUtils.options.clone();
 		ScoreUtils.ratingWindows = OptionUtils.ratingWindowTypes[currentOptions.ratingWindow];
@@ -1011,6 +1014,7 @@ class PlayState extends MusicBeatState
 		opponentStrumLines = new FlxTypedGroup<FlxSprite>();
 		luaSprites = new Map<String, FlxSprite>();
 		luaObjects = new Map<String, FlxBasic>();
+		luaTexts = new Map<String, FlxText>();
 		refNotes = new FlxTypedGroup<FlxSprite>();
 		opponentRefNotes = new FlxTypedGroup<FlxSprite>();
 		refReceptors = new FlxTypedGroup<FlxSprite>();
@@ -1669,6 +1673,29 @@ class PlayState extends MusicBeatState
 				
 				sprite.cameras = [CoolUtil.cameraFromString(camera)];
 			});
+
+            var text:FlxText;
+
+			Lua_helper.add_callback(lua.state,"newText", function(?x:Int=0,?y:Int=0,?goofy:Int=0,?textGoofy:String,?goofy2:Int=0,?textName:String,camera:String='game'){
+				text = new FlxText(x,y,goofy,textGoofy,goofy2);
+				var name = "UnnamedText"+unnamedLuaTexts;
+				if(textName!=null)
+					name=textName;
+				else
+					unnamedLuaTexts++;
+
+				var lSprite = new LuaText(text,name,textName!=null);
+				var classIdx = Lua.gettop(lua.state)+1;
+				lSprite.Register(lua.state);
+				Lua.pushvalue(lua.state,classIdx);
+				add(text);
+
+				text.cameras = [CoolUtil.cameraFromString(camera)];
+			});
+
+			Lua_helper.add_callback(lua.state,"setFormatText", function(?font:String,size:Int=8,color:String,?alignment:String,?borderStyle:String,?borderColor:String){
+				text.setFormat(Paths.font(font), size, CoolUtil.getColorFromHex(color), CoolUtil.alignmentFromString(alignment), CoolUtil.borderFromString(borderStyle), CoolUtil.getColorFromHex(borderColor));
+		    });
 
 			var leftPlayerNote = new LuaNote(0,true);
 			var downPlayerNote = new LuaNote(1,true);

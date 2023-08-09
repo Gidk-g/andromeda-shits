@@ -3,6 +3,7 @@ package;
 import flixel.*;
 import lime.utils.Assets;
 import openfl.display.BlendMode;
+import flixel.text.FlxText;
 import sys.io.File;
 
 using StringTools;
@@ -46,6 +47,21 @@ class CoolUtil
 			case 'camother' | 'other': return PlayState.instance.camOther;
 		}
 		return PlayState.instance.camGame;
+	}
+
+	public static function alignmentFromString(alignment:String):FlxTextAlign {
+		switch(alignment.toLowerCase().trim()) {
+			case 'right': return RIGHT;
+			case 'center': return CENTER;
+		}
+		return LEFT;
+	}
+
+	public static function borderFromString(border:String):FlxTextBorderStyle {
+		switch(border.toLowerCase().trim()) {
+			case 'outline': return OUTLINE;
+		}
+		return NONE;
 	}
 
 	public static function blendModeFromString(blend:String):BlendMode {
