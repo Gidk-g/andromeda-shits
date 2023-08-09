@@ -1543,7 +1543,7 @@ private static var getPropertyC:cpp.Callable<StatePointer->Int> = cpp.Callable.f
           return 0;
         }
       },
-      "text"=>{
+      "text"=>{ // idk doesn't work
         defaultValue:text.text,
         getter:function(l:State,data:Any){
           Lua.pushstring(l,text.text);
