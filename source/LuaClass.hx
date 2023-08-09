@@ -1545,7 +1545,10 @@ private static var getPropertyC:cpp.Callable<StatePointer->Int> = cpp.Callable.f
       },
       "text"=>{
         defaultValue:text.text,
-        getter:GetStringProperty,
+        getter:function(l:State,data:Any){
+          Lua.pushstring(l,text.text);
+          return 1;
+        },
         setter:function(l:State){
           LuaL.error(l,"text is read-only.");
           return 0;
