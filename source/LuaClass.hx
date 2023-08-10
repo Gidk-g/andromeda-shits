@@ -636,6 +636,15 @@ class LuaSprite extends LuaClass {
     return 0;
   }
 
+  private static function updateHitbox(l:StatePointer):Int{
+    // 1 = self
+    Lua.getfield(state,1,"spriteName");
+    var spriteName = Lua.tostring(state,-1);
+    var sprite = PlayState.currentPState.luaSprites[spriteName];
+    sprite.updateHitbox();
+    return 0;
+  }
+
   private static function setCamera(l:StatePointer){
       // 1 = self
       // 2 = camname
@@ -720,6 +729,7 @@ class LuaSprite extends LuaClass {
   private static var addSpriteAnimC:cpp.Callable<StatePointer->Int> = cpp.Callable.fromStaticFunction(addSpriteAnim);
   private static var screenCenterC:cpp.Callable<StatePointer->Int> = cpp.Callable.fromStaticFunction(screenCenter);
   private static var loadGraphicC:cpp.Callable<StatePointer->Int> = cpp.Callable.fromStaticFunction(loadGraphic);
+  private static var updateHitboxC:cpp.Callable<StatePointer->Int> = cpp.Callable.fromStaticFunction(updateHitbox);
   private static var setFramesC:cpp.Callable<StatePointer->Int> = cpp.Callable.fromStaticFunction(setFrames);
   private static var playAnimSpriteC:cpp.Callable<StatePointer->Int> = cpp.Callable.fromStaticFunction(playAnimSprite);
   private static var makeGraphicC:cpp.Callable<StatePointer->Int> = cpp.Callable.fromStaticFunction(makeGraphic);
@@ -974,6 +984,17 @@ class LuaSprite extends LuaClass {
         },
         setter:function(l:State){
           LuaL.error(l,"setFrames is read-only.");
+          return 0;
+        }
+      },
+      "updateHitbox"=>{
+        defaultValue:0,
+        getter:function(l:State,data:Any){
+          Lua.pushcfunction(l,updateHitboxC);
+          return 1;
+        },
+        setter:function(l:State){
+          LuaL.error(l,"updateHitbox is read-only.");
           return 0;
         }
       },
