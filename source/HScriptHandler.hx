@@ -64,27 +64,25 @@ class HScriptHandler
         callFunction("update", [elapsed]);
     }
 
-    public function callFunction(func:String, ?args:Array<Dynamic>)
+    public function callFunction(funcName:String, ?args:Array<Dynamic>)
     {
-        if(interp.variables.exists(func))
-        {
-            var real_func = interp.variables.get(func);
+		if (args == null)
+			args = [];
 
-            try {
-                if(args == null)
-                    real_func();
-                else
-                    Reflect.callMethod(null, real_func, args);
-            } catch(e) {
-                trace(e.details());
-                trace("ERROR Caused in " + func + " with " + Std.string(args) + " args");
-            }
-        }
+		try {
+			var func:Dynamic = interp.variables.get(funcName);
+			if (func != null && Reflect.isFunction(func))
+				return Reflect.callMethod(null, func, args);
+		} catch (error:Dynamic) {
+            trace(error);
+		}
 
         for(other_script in other_scripts)
         {
-            other_script.callFunction(func, args);
+            other_script.callFunction(funcName, args);
         }
+
+		return true;
     }
 
     public function setDefaultVariables()
