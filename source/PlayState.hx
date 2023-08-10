@@ -1236,28 +1236,27 @@ class PlayState extends MusicBeatState
 			lua.setGlobalVar("white",FlxColor.WHITE);
 
 		    lua.setGlobalVar('FlxColor', {
-			TRANSPARENT: 0x00000000,
-			WHITE: 0xFFFFFFFF,
-			GRAY: 0xFF808080,
-			BLACK: 0xFF000000,
-
-			GREEN: 0xFF008000,
-			LIME: 0xFF00FF00,
-			YELLOW: 0xFFFFFF00,
-			ORANGE: 0xFFFFA500,
-			RED: 0xFFFF0000,
-			PURPLE: 0xFF800080,
-			BLUE: 0xFF0000FF,
-			BROWN: 0xFF8B4513,
-			PINK: 0xFFFFC0CB,
-			MAGENTA: 0xFFFF00FF,
-			CYAN: 0xFF00FFFF,
+			    TRANSPARENT: 0x00000000,
+			    WHITE: 0xFFFFFFFF,
+			    GRAY: 0xFF808080,
+			    BLACK: 0xFF000000,
+			    GREEN: 0xFF008000,
+			    LIME: 0xFF00FF00,
+			    YELLOW: 0xFFFFFF00,
+			    ORANGE: 0xFFFFA500,
+			    RED: 0xFFFF0000,
+			    PURPLE: 0xFF800080,
+			    BLUE: 0xFF0000FF,
+			    BROWN: 0xFF8B4513,
+			    PINK: 0xFFFFC0CB,
+			    MAGENTA: 0xFFFF00FF,
+			    CYAN: 0xFF00FFFF,
 		    });
 
 		    lua.setGlobalVar("FlxG", {
-			width: FlxG.width,
-			height: FlxG.height,
-			elapsed: FlxG.elapsed,
+			    width: FlxG.width,
+			    height: FlxG.height,
+			    elapsed: FlxG.elapsed,
 		    });
 
 			var timerCount:Int = 0;
