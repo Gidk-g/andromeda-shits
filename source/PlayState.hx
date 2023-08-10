@@ -127,6 +127,7 @@ class PlayState extends MusicBeatState
 	public var luaSprites:Map<String, Dynamic>;
 	public var luaObjects:Map<String, Dynamic>;
 	public var luaTexts:Map<String, Dynamic>;
+	public var luaTimers:Map<String, Dynamic>;
 	public var unnamedLuaSprites:Int=0;
 	public var unnamedLuaShaders:Int=0;
 	public var unnamedLuaTexts:Int=0;
@@ -1015,6 +1016,7 @@ class PlayState extends MusicBeatState
 		luaSprites = new Map<String, FlxSprite>();
 		luaObjects = new Map<String, FlxBasic>();
 		luaTexts = new Map<String, FlxText>();
+		luaTimers = new Map<String, FlxTimer>();
 		refNotes = new FlxTypedGroup<FlxSprite>();
 		opponentRefNotes = new FlxTypedGroup<FlxSprite>();
 		refReceptors = new FlxTypedGroup<FlxSprite>();
@@ -1259,25 +1261,18 @@ class PlayState extends MusicBeatState
 			    elapsed: FlxG.elapsed,
 		    });
 
-			var timerCount:Int = 0;
-			Lua_helper.add_callback(lua.state,"startTimer", function(time: Float){
-				// 1 = time
-				// 2 = callback
-
-				var name = 'timerCallbackNum${timerCount}';
-				Lua.pushvalue(lua.state,2);
-				Lua.setglobal(lua.state, name);
-				luaFuncs.push(name);
-
-				new FlxTimer().start(time, function(t:FlxTimer){
-					callLua(name,[]);
-
-				});
-
-				timerCount++;
-
-			});
-
+		    Lua_helper.add_callback(lua.state, "runTimer", function(tag:String, time:Float = 1, loops:Int = 1) {
+			    cancelTimer(tag);
+			    luaTimers.set(tag, new FlxTimer().start(time, function(tmr:FlxTimer) {
+				    if(tmr.finished) {
+					    luaTimers.remove(tag);
+				    }
+				    callLua('timerCompleted', [tag, tmr.loops, tmr.loopsLeft]);
+			    }, loops));
+		    });
+		    Lua_helper.add_callback(lua.state, "cancelTimer", function(tag:String) {
+			    cancelTimer(tag);
+		    });
 			Lua_helper.add_callback(lua.state,"skipCountdown", function(){
 				skipCountdown = true;
 			});
@@ -1860,6 +1855,15 @@ class PlayState extends MusicBeatState
 	public function allScriptSet(variable:String, value:Dynamic) {
 		for (cool_script in scripts) {
 			cool_script.interp.variables.set(variable, value);
+		}
+	}
+
+	function cancelTimer(tag:String) {
+		if(luaTimers.exists(tag)) {
+			var theTimer:FlxTimer = luaTimers.get(tag);
+			theTimer.cancel();
+			theTimer.destroy();
+			luaTimers.remove(tag);
 		}
 	}
 
