@@ -1718,11 +1718,15 @@ class PlayState extends MusicBeatState
 				Lua.pushvalue(lua.state,classIdx);
 				add(text);
 
+				luaTexts.set(textName, text);
 				text.cameras = [CoolUtil.cameraFromString(camera)];
 			});
 
-			Lua_helper.add_callback(lua.state,"setFormatText", function(?font:String,size:Int=8,color:String,?alignment:String,?borderStyle:String,?borderColor:String){
-				text.setFormat(Paths.font(font), size, CoolUtil.getColorFromHex(color), CoolUtil.alignmentFromString(alignment), CoolUtil.borderFromString(borderStyle), CoolUtil.getColorFromHex(borderColor));
+			Lua_helper.add_callback(lua.state,"setFormatText", function(tag:String,?font:String,size:Int=8,color:String,?alignment:String,?borderStyle:String,?borderColor:String){
+				if(luaTexts.exists(tag)) {
+					var funnyText:FlxText = luaTexts.get(tag);
+				    funnyText.setFormat(Paths.font(font), size, CoolUtil.getColorFromHex(color), CoolUtil.alignmentFromString(alignment), CoolUtil.borderFromString(borderStyle), CoolUtil.getColorFromHex(borderColor));
+				}
 		    });
 
 			var leftPlayerNote = new LuaNote(0,true);
