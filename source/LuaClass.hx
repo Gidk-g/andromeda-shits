@@ -587,13 +587,12 @@ class LuaSprite extends LuaClass {
     // 6 = key
     var width:Int = Std.int(LuaL.checknumber(state,2));
     var height:Int = Std.int(LuaL.checknumber(state,3));
-    var color:FlxColor = FlxColor.WHITE;
+    var color:FlxColor = FlxColor.BLACK;
     var unique:Null<Bool> = null;
     var key:Null<String> = null;
-    if(Lua.isnumber(state,4))
-      color=FlxColor.fromInt(Std.int(Lua.tonumber(state,4)));
+
     if(Lua.isstring(state,4))
-      color = FlxColor.fromString(Lua.tostring(state,4));
+      color = FlxColor.fromString('0x' + Lua.tostring(state,4));
     if(Lua.isboolean(state,5))
       unique=Lua.toboolean(state,5);
     if(Lua.isstring(state,6))
@@ -681,18 +680,22 @@ class LuaSprite extends LuaClass {
     // 3 = endColour
     // 4 = time
     // 5 = easing-style
-    var startColour:FlxColor = cast LuaL.checknumber(state,2);
-    var endColour:FlxColor = cast LuaL.checknumber(state,3);
+    var startColour:FlxColor = FlxColor.BLACK;
+    var endColour:FlxColor = FlxColor.BLACK;
     var time = LuaL.checknumber(state,4);
     var style = LuaL.checkstring(state,5);
     Lua.getfield(state,1,"spriteName");
     var spriteName = Lua.tostring(state,-1);
     var sprite = PlayState.currentPState.luaSprites[spriteName];
     var luaObj = LuaStorage.objects[spriteName];
+    if(Lua.isstring(state,1))
+      startColour = FlxColor.fromString('0x' + Lua.tostring(state,1));
+    if(Lua.isstring(state,2))
+      endColour = FlxColor.fromString('0x' + Lua.tostring(state,2));
     /*FlxTween.tween(sprite,properties,time,{
       ease: Reflect.field(FlxEase,style),
     });*/
-    FlxTween.color(sprite, time, FlxColor.fromInt(startColour), FlxColor.fromInt(endColour), {
+    FlxTween.color(sprite, time, startColour, endColour, {
       ease: Reflect.field(FlxEase,style),
     });
     return 1;
@@ -1322,18 +1325,22 @@ private static function tweenColor(l:StatePointer):Int{
 // 3 = endColour
 // 4 = time
 // 5 = easing-style
-var startColour:FlxColor = cast LuaL.checknumber(state,2);
-var endColour:FlxColor = cast LuaL.checknumber(state,3);
+var startColour:FlxColor = FlxColor.BLACK;
+var endColour:FlxColor = FlxColor.BLACK;
 var time = LuaL.checknumber(state,4);
 var style = LuaL.checkstring(state,5);
 Lua.getfield(state,1,"textName");
 var textName = Lua.tostring(state,-1);
 var text = PlayState.currentPState.luaTexts[textName];
 var luaObj = LuaStorage.objects[textName];
+if(Lua.isstring(state,1))
+  startColour = FlxColor.fromString('0x' + Lua.tostring(state,1));
+if(Lua.isstring(state,2))
+  endColour = FlxColor.fromString('0x' + Lua.tostring(state,2));
 /*FlxTween.tween(text,properties,time,{
   ease: Reflect.field(FlxEase,style),
 });*/
-FlxTween.color(text, time, FlxColor.fromInt(startColour), FlxColor.fromInt(endColour), {
+FlxTween.color(text, time, startColour, endColour, {
   ease: Reflect.field(FlxEase,style),
 });
 return 1;
