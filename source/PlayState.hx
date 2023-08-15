@@ -1316,8 +1316,8 @@ class PlayState extends MusicBeatState
 												}
 											}
 			});
-			Lua_helper.add_callback(lua.state,"colorFromString", function(str:String){
-				return Std.int(FlxColor.fromString(str));
+			Lua_helper.add_callback(lua.state,"colorFromString", function(color:String){
+                CoolUtil.getColorFromHex(color);
 			});
 			Lua_helper.add_callback(lua.state,"playSound", function(snd:String,vol:Float=1,loop:Bool=false){
 				FlxG.sound.play(Paths.sound(snd),vol,loop);
